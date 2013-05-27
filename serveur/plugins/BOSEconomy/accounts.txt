@@ -1,4 +1,0 @@
-eyesofcreeper {
-	type player
-	money 100.0
-}
