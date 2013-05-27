@@ -1,0 +1,13 @@
+default {
+	type wage
+	disabled false
+	excluded true
+	locked false
+	master 
+	onlineMode false
+	bracketInterval 
+	value 0.0
+	members {
+		eyesofcreeper 1
+	}
+}

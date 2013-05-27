@@ -1,0 +1,12 @@
+debug false
+default-bracket default
+default-bracket-interval 1 hour
+fractional-digits 0
+initial-money 100.0
+money-name coin
+money-name-plural coins
+payday-interval 1 day
+save-interval 1 minute
+silent-wages false
+use-op-permissions false
+use-permissions-plugin false
