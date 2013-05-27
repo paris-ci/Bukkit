@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 
+## AUTO INSTALL PAR ARTHUR ##
+
 ############## VARS ##############
 
 VERT="\033[1;32m"
