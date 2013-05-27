@@ -27,7 +27,7 @@ def generation(sleep):
 	print (VERT + "Attente de la generation des fichiers" + NORMAL)
 	subprocess.call(["open", "./serveur/serveur/demarrer.command"]) # Lancement du serveur
 	print (VERT + "Patientez " + str(sleep) + " secondes ..." + NORMAL)
-	progressbar(sleep)	
+	progressbar(sleep) # Barre de progression
 	print (VERT + "Arret du serveur" + NORMAL)
 	os.system("killall java") # Quitter java
 	print (ROUGE + "Vous pouvez quitter le teminal <serveur> (celui avec [OPERATION TERMINEE] et sans couleurs)" + NORMAL)
@@ -37,14 +37,14 @@ def generation(sleep):
 def progressbar(longueur):
 	toolbar_width = longueur
 
-	# setup toolbar
+	# config de la barre
 	sys.stdout.write("[%s]" % (" " * toolbar_width))
 	sys.stdout.flush()
 	sys.stdout.write("\b" * (toolbar_width+1)) # return to start of line, after '['
 
 	for i in xrange(toolbar_width):
-		time.sleep(1) # do real work here
-		# update the bar
+		time.sleep(1) # Attends 1 seconde
+		# Ecriture sur la barre
 		sys.stdout.write("~")
 		sys.stdout.flush()
 	sys.stdout.write("\n")
@@ -54,7 +54,7 @@ def progressbar(longueur):
 def dl(nom,url):
 	print (VERT + "Installation de " + nom +" !" + NORMAL)
 	print (JAUNE + "Cela peut prendre 1 a 2 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
-	urllib.urlretrieve(url, './serveur/serveur/plugins/' + nom + ".jar") #DL vault
+	urllib.urlretrieve(url, './serveur/serveur/plugins/' + nom + ".jar") #DL + nom
 	print (VERT + "Téléchargement terminé" + NORMAL)
 	print (VERT + nom + " installé" + NORMAL)
 	
@@ -70,12 +70,12 @@ def dlzip(nom,url):
 	    z.extractall("./serveur/serveur/plugins/" + nom)
 	print (VERT + nom + " installé" + NORMAL)
 	print (VERT + "Effacement de l'archive" + NORMAL)
-	os.system("rm ./serveur/serveur/plugins/" + nom + ".zip")
+	os.system("rm ./serveur/serveur/plugins/" + nom + ".zip") # Suppression du zip
 	print (VERT + "Effacement terminé" + NORMAL)
 	print (VERT + "Deplacement des plugins" + NORMAL) 
-	os.system("mv ./serveur/serveur/plugins/" + nom + "/* ./serveur/serveur/plugins")
+	os.system("mv ./serveur/serveur/plugins/" + nom + "/* ./serveur/serveur/plugins") # Sortie du dossier décompressé
 	print (VERT + """Suppression du dossier """ + nom + """ inutile""" + NORMAL)
-	os.system("rm -R ./serveur/serveur/plugins/" + nom)
+	os.system("rm -R ./serveur/serveur/plugins/" + nom) # Suppression du dossier décompressé vide
 	
 ###############
 def install():
@@ -127,7 +127,7 @@ def plugins():
 	dlzip("wg","http://dev.bukkit.org/media/files/702/797/worldguard-5.7.4.zip")
 	## INSTALL BOSE ECO ##
 	dlzip("boseecon","http://dev.bukkit.org/media/files/577/409/BOSEcon0731.zip")
-	os.system("rm ./serveur/serveur/plugins/wg/contrib")
+	os.system("rm ./serveur/serveur/plugins/wg/contrib") # Dossier particulier 
 	## INSTALL VAULT ##
 	dl("vault","http://dev.bukkit.org/media/files/694/78/Vault.jar") 
 	## INSTALL NO CHEAT PLUS ##
