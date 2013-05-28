@@ -31,6 +31,8 @@ import operator
 ############### MCLP : https://github.com/stevenleeg/Minecraft-Log-Parser
 
 def mclp(path):
+	sauvgarde = open("stats.txt","w")
+
 	actions = {
 		"login": re.compile("([0-9]{4})\-([0-9]{2})\-([0-9]{2}) ([0-2][0-9])\:([0-9]{2})\:([0-9]{2}) \[INFO\] ([A-z0-9]*) ?\[\/[0-9.]{4,15}\:[0-9]*\]"),
 	    "logout": re.compile("([0-9]{4})\-([0-9]{2})\-([0-9]{2}) ([0-2][0-9])\:([0-9]{2})\:([0-9]{2}) \[INFO\] ([A-z0-9]*) lost connection"),
@@ -112,7 +114,10 @@ def mclp(path):
 	for time in times:
 		counter = counter + 1
 		print "%2d) %s" % (counter, time)
+		sauvgarde.write("%2d) %s" % (counter, time) + "\n")
+		
 	f.close()
+	sauvgarde.close()
 
 ###############
 
