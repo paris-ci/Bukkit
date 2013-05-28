@@ -291,7 +291,8 @@ while ok is not True:
 		
 	elif start == "stats":
 		ok = True
-		path = raw_input("Deplacez ici votre fichier server.log et tapez entrer (pensez a enlever l'espace a la fin du path !) >>>")
+		path = raw_input(VERT + "Deplacez ici votre fichier server.log et tapez entrer (pensez a enlever l'espace a la fin du path !) >>>" + NORMAL)
+		print (JAUNE + "Lancement du prossesus" + NORMAL)
 		mclp(path)
 	else :
 		ok = False
