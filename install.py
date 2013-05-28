@@ -21,9 +21,101 @@ import zipfile
 import urllib
 import time
 import subprocess
-
+import re
+import datetime
+import operator
 
 ############## FUNC ##############
+
+
+############### MCLP : https://github.com/stevenleeg/Minecraft-Log-Parser
+
+def mclp(path):
+	actions = {
+		"login": re.compile("([0-9]{4})\-([0-9]{2})\-([0-9]{2}) ([0-2][0-9])\:([0-9]{2})\:([0-9]{2}) \[INFO\] ([A-z0-9]*) ?\[\/[0-9.]{4,15}\:[0-9]*\]"),
+	    "logout": re.compile("([0-9]{4})\-([0-9]{2})\-([0-9]{2}) ([0-2][0-9])\:([0-9]{2})\:([0-9]{2}) \[INFO\] ([A-z0-9]*) lost connection"),
+	    "server_stop": re.compile("([0-9]{4})\-([0-9]{2})\-([0-9]{2}) ([0-2][0-9])\:([0-9]{2})\:([0-9]{2}) \[INFO\] Stopping server")
+	}
+	f = open(path)
+	online = {}
+	totals = {}
+	for line in f.readlines():
+		regex = None
+		action = None
+		player = None
+		time = None
+		for action in actions:
+			if actions[action].match(line):
+				regex = actions[action]
+				break
+	
+		if regex is not None:
+			# Get the user's name and parse the datetime
+			data = regex.split(line)
+			player = data[7]
+			time = datetime.datetime(int(data[1]), int(data[2]), int(data[3]), int(data[4]), int(data[5]), int(data[6]))
+	
+			# Now do things!
+			if action is "login":
+				online[player] = time
+			elif action is "logout":
+				if player not in totals:
+					totals[player] = 0
+				if player in online:
+					delta = time - online[player]
+				else:
+					break
+
+				totals[player] += delta.seconds
+				del online[player]
+			elif action is "server_stop":
+				# Log off all players
+				for player in online:
+					if player not in totals:
+						totals[player] = 0
+					delta = time - online[player]
+					totals[player] += delta.seconds
+				online = {}
+
+	sort = sorted(totals.iteritems(), key=operator.itemgetter(1))
+	times = []
+	for player in sort:
+		# Convert to hours/minutes/seconds
+		time = "%20s: " % player[0]
+		total = player[1]
+		days = total / 86400
+		if days > 0:
+			time += "%2s days" % int(days)
+			total -= int(days) * 86400
+		else:
+			time += "       "
+		hours = total / 3600
+		if hours > 0:
+			time += " %2s hours" % int(hours)
+			total -= int(hours) * 3600
+		else:
+			time += "         "
+		mins = total / 60
+		if mins > 0:
+			time += " %2s minutes" % int(mins)
+			total -= int(mins) * 60
+		else:
+			time += "           "
+		if total > 0:
+			time += " %2s seconds" % total
+	
+		times.append(time)
+
+	times.reverse()
+
+	counter = 0
+	for time in times:
+		counter = counter + 1
+		print "%2d) %s" % (counter, time)
+	f.close()
+
+###############
+
 
 def generation(sleep):
 	print (VERT + "Attente de la generation des fichiers" + NORMAL)
@@ -83,7 +175,7 @@ def dlzip(nom,url):
 def install():
 	print (VERT + "Instalation automatique de bukkit sous mac" + NORMAL)
 	print (VERT + "Preparation ... Appuyez sur entrer pour continuer" + NORMAL)
-	start = raw_input(">>>") # Pour apres passer des arguments au boot si besoin : utiliser la variable start
+#	start = raw_input(">>>") # Pour apres passer des arguments au boot si besoin : utiliser la variable start
 	print (VERT + "Extraction des fichiers indispensables" + NORMAL)
 	with zipfile.ZipFile('serveur.zip', "r") as z: # Extraction des fichiers indispensables
 	    z.extractall("serveur")
@@ -118,7 +210,7 @@ def install():
 
 def plugins():
 	## INSTALL ESSENTIALS ##
-	dlzip ("essentials","http://dev.bukkit.org/media/files/704/434/Essentials.zip")
+	dlzip ("essentials","http://ess.ementalo.com/repository/download/bt2/.lastSuccessful/Essentials.zip?guest=1")
 	print (VERT + "Lancement du serveur pour creer la config essentials !" + NORMAL)
 	generation(40)
 	## INSTALL PEX ##
@@ -129,6 +221,7 @@ def plugins():
 	dlzip("wg","http://dev.bukkit.org/media/files/702/797/worldguard-5.7.4.zip")
 	## INSTALL BOSE ECO ##
 	dlzip("boseecon","http://dev.bukkit.org/media/files/577/409/BOSEcon0731.zip")
+	dlzip("dynmap","http://webbukkit.org/jenkins/public/dynmap/dynmap-HEAD-bin.zip")
 	os.system("rm ./serveur/serveur/plugins/wg/contrib") # Dossier particulier 
 	## INSTALL VAULT ##
 	dl("vault","http://dev.bukkit.org/media/files/694/78/Vault.jar") 
@@ -163,6 +256,9 @@ def finition():
 	os.system("rm -R ./serveur/plugins/CHANGELOG.txt")
 	os.system("rm -R ./serveur/plugins/LICENSE.txt")
 	os.system("rm -R ./serveur/plugins/README.html")
+	temps = float(time.time()) - float(chrono)
+	tempsmin = float(temps)/float(60)
+	print (ROSE + "Temps passé sur l'install : " + str(temps) + " secondes soit " + str(tempsmin) + " minute(s)" + NORMAL) # Fin du chrono
 
 ############## MAIN ##############
 
@@ -172,19 +268,30 @@ def finition():
 #  # #  #   #######       #      #   # #
 #   #   #  #       #  #########  #    ##
 
-print("Loading ...")
+print("\nLoading ...")
 chrono = time.time() # Demarrage du chrono
-install()
-print (JAUNE + "Passons a l'installation des plugins ..." + NORMAL)
-plugins()
-print (JAUNE + "Passons a la configuration" + NORMAL)
-config()
-print (JAUNE + "Passons a la finition..." + NORMAL)
-finition()
-print (CYAN + "FIN DE L'INSTALATION !" + NORMAL)
-temps = float(time.time()) - float(chrono)
-tempsmin = float(temps)/float(60)
-print (ROSE + "Temps passé sur l'install : " + str(temps) + " secondes soit " + str(tempsmin) + " minute(s)" + NORMAL) # Fin du chrono
+ok = False
+while ok is not True:
+	start = raw_input(VERT + "Installation (install) ou statistiques (stats) >>>" + NORMAL)
+	if start == "install":
+		ok = True
+		install()
+		print (JAUNE + "Passons a l'installation des plugins ..." + NORMAL)
+		plugins()
+		print (JAUNE + "Passons a la configuration" + NORMAL)
+		config()
+		print (JAUNE + "Passons a la finition..." + NORMAL)
+		finition()
+		print (CYAN + "FIN DE L'INSTALATION !" + NORMAL)
+		
+	elif start == "stats":
+		ok = True
+		path = raw_input("Deplacez ici votre fichier server.log et tapez entrer (pensez a enlever l'espace a la fin du path !) >>>")
+		mclp(path)
+	else :
+		ok = False
+		print(ROUGE + "Soit install, soit stats :)")
+
 
 
 ######  ######  #######
