@@ -259,7 +259,7 @@ def plugins():
 	## INSTALL VAULT ##
 	dl("vault","http://dev.bukkit.org/media/files/694/78/Vault.jar") 
 	## INSTALL NO CHEAT PLUS ##
-	dl("ncp","http://dev.bukkit.org/media/files/705/88/NoCheatPlus.jar")
+	dl("ncp","http://ci.md-5.net/job/NoCheatPlus/lastSuccessfulBuild/artifact/target/NoCheatPlus.jar")
 
 ###############
 
