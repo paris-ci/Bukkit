@@ -259,10 +259,11 @@ def install():
 			else :
 				print (ROUGE + "Version " + version + " non trouvée ... Choisisez entre recommandee, beta et dev" + NORMAL)
 		print (VERT + "Lancement du serveur ... Veuillez ne rien toucher !" + NORMAL)
-	except :
-		print(ROUGE + "Erreur : le dossier serveur n'as pas été trouvé ! Lancez d'abord une installation")
+		generation(60) # Generation des fichiers par un lancement du serveur
+
+	except:
+		print(ROUGE + "Erreur : le dossier serveur n'as pas été trouvé ! Lancez d'abord une installation" + NORMAL)
 		installprocess()
-	generation(60) # Generation des fichiers par un lancement du serveur
 
 ###############
 
@@ -279,6 +280,7 @@ def plugins():
 	dlzip("wg","http://dev.bukkit.org/media/files/702/797/worldguard-5.7.4.zip")
 	## INSTALL BOSE ECO ##
 	dlzip("boseecon","http://dev.bukkit.org/media/files/577/409/BOSEcon0731.zip")
+	## INSTALL DYNMAP ##
 	dlzip("dynmap","http://webbukkit.org/jenkins/public/dynmap/dynmap-HEAD-bin.zip")
 	os.system("rm ./serveur/serveur/plugins/wg/contrib") # Dossier particulier 
 	## INSTALL VAULT ##
