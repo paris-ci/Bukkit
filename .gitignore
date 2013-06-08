@@ -1,3 +1,23 @@
 .DS_Store
 
 .stats.txt
+
+serveur/world_the_end/uid.dat
+
+serveur/world_the_end/session.lock
+
+serveur/banned-ips.txt
+
+serveur/banned-players.txt
+
+serveur/bukkit.yml
+
+serveur/craftbukkit.jar
+
+serveur/demarrer.command
+
+serveur/help.yml
+
+serveur/ops.txt
+
+serveur/permissions.yml
