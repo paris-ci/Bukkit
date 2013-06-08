@@ -259,7 +259,7 @@ def install():
 			else :
 				print (ROUGE + "Version " + version + " non trouvée ... Choisisez entre recommandee, beta et dev" + NORMAL)
 		print (VERT + "Lancement du serveur ... Veuillez ne rien toucher !" + NORMAL)
-	except IOError:
+	except :
 		print(ROUGE + "Erreur : le dossier serveur n'as pas été trouvé ! Lancez d'abord une installation")
 		installprocess()
 	generation(60) # Generation des fichiers par un lancement du serveur
