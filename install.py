@@ -238,28 +238,30 @@ def install():
 	print (VERT + "Finition de l'extraction ..." + NORMAL)
 	os.system("rm -R ./serveur/__MACOSX") # Suppression d'un dossier inutile
 	ok = False
-	while ok is not True:
-		version = raw_input(JAUNE + "Quelle version de craft bukkit voulez vous ? Une build de '" + CYAN + "dev" + JAUNE + "' (completement non-supportées et parfois instables), Une build '" + CYAN + "beta" + JAUNE + "' (generalement a jour et suportée a moitiée) ou une build ' " + CYAN + "recommandee" + JAUNE + "' (parfois une version majeure en moins ... Mais completement suportée) ? >>>" + NORMAL)
-		if version == "recommandee":
-			print (VERT + "Télechargement de la derniere version " + version + " de craft bukkit" + NORMAL)
-			print (JAUNE + "Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
-			urllib.urlretrieve('http://dl.bukkit.org/latest-rb/craftbukkit.jar', './serveur/serveur/craftbukkit.jar') # téléchargement de CB (latest - RB)
-			ok = True
-		elif version == "beta":
-			print (VERT + "Télechargement de la derniere version " + version + " de craft bukkit" + NORMAL)
-			print (JAUNE + "Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
-			urllib.urlretrieve('http://dl.bukkit.org/latest-beta/craftbukkit-beta.jar', './serveur/serveur/craftbukkit.jar') # téléchargement de CB (latest - beta)
-			ok = True
-		elif version == "dev":
-			print (VERT + "Télechargement de la derniere version " + version + " de craft bukkit" + NORMAL)
-			print (JAUNE + "Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
-			urllib.urlretrieve('http://dl.bukkit.org/latest-dev/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') # téléchargement de CB (latest - dev)
-			ok = True
-		else :
-			print (ROUGE + "Version " + version + " non trouvée ... Choisisez entre recommandee, beta et dev" + NORMAL)
-	print (VERT + "Autorisation de l'executable")
-	os.system("chmod +x ./serveur/serveur/demarrer.command") # Rends executable demarrer.command
-	print (VERT + "Lancement du serveur ... Veuillez ne rien toucher !" + NORMAL)
+	try:
+		while ok is not True:
+			version = raw_input(JAUNE + "Quelle version de craft bukkit voulez vous ? Une build de '" + CYAN + "dev" + JAUNE + "' (completement non-supportées et parfois instables), Une build '" + CYAN + "beta" + JAUNE + "' (generalement a jour et suportée a moitiée) ou une build ' " + CYAN + "recommandee" + JAUNE + "' (parfois une version majeure en moins ... Mais completement suportée) ? >>>" + NORMAL)
+			if version == "recommandee":
+				print (VERT + "Télechargement de la derniere version " + version + " de craft bukkit" + NORMAL)
+				print (JAUNE + "Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
+				urllib.urlretrieve('http://dl.bukkit.org/latest-rb/craftbukkit.jar', './serveur/serveur/craftbukkit.jar') # téléchargement de CB (latest - RB)
+				ok = True
+			elif version == "beta":
+				print (VERT + "Télechargement de la derniere version " + version + " de craft bukkit" + NORMAL)
+				print (JAUNE + "Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
+				urllib.urlretrieve('http://dl.bukkit.org/latest-beta/craftbukkit-beta.jar', './serveur/serveur/craftbukkit.jar') # téléchargement de CB (latest - beta)
+				ok = True
+			elif version == "dev":
+				print (VERT + "Télechargement de la derniere version " + version + " de craft bukkit" + NORMAL)
+				print (JAUNE + "Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
+				urllib.urlretrieve('http://dl.bukkit.org/latest-dev/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') # téléchargement de CB (latest - dev)
+				ok = True
+			else :
+				print (ROUGE + "Version " + version + " non trouvée ... Choisisez entre recommandee, beta et dev" + NORMAL)
+		print (VERT + "Lancement du serveur ... Veuillez ne rien toucher !" + NORMAL)
+	except IOError:
+		print(ROUGE + "Erreur : le dossier serveur n'as pas été trouvé ! Lancez d'abord une installation")
+		installprocess()
 	generation(60) # Generation des fichiers par un lancement du serveur
 
 ###############
@@ -315,6 +317,16 @@ def finition():
 	temps = float(time.time()) - float(chrono)
 	tempsmin = float(temps)/float(60)
 	print (ROSE + "Temps passé sur l'install : " + str(temps) + " secondes soit " + str(tempsmin) + " minute(s)" + NORMAL) # Fin du chrono
+	
+def installprocess():
+	install()
+	print (JAUNE + "Passons a l'installation des plugins ..." + NORMAL)
+	plugins()
+	print (JAUNE + "Passons a la configuration" + NORMAL)
+	config()
+	print (JAUNE + "Passons a la finition..." + NORMAL)
+	finition()
+	print (CYAN + "FIN DE L'INSTALATION !" + NORMAL)
 
 ############## MAIN ##############
 
@@ -331,14 +343,7 @@ while ok is not True:
 	start = raw_input(VERT + "Installation (install) ou statistiques (stats) ou mise a jour de craft bukkit (maj) ? >>>" + NORMAL)
 	if start == "install":
 		ok = True
-		install()
-		print (JAUNE + "Passons a l'installation des plugins ..." + NORMAL)
-		plugins()
-		print (JAUNE + "Passons a la configuration" + NORMAL)
-		config()
-		print (JAUNE + "Passons a la finition..." + NORMAL)
-		finition()
-		print (CYAN + "FIN DE L'INSTALATION !" + NORMAL)
+		installprocess()
 		
 	elif start == "stats":
 		ok = True
