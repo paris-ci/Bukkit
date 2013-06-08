@@ -149,6 +149,29 @@ def mclp(path):
 
 ###############
 
+def maj():
+	print(VERT + "Mise a jour du serveur !" + NORMAL)
+	ok = False
+	while ok is not True:
+		version = raw_input(JAUNE + "Quelle version de craft bukkit voulez vous ? Une build de '" + CYAN + "dev" + JAUNE + "' (completement non-supportées et parfois instables), Une build '" + CYAN + "beta" + JAUNE + "' (generalement a jour et suportée a moitiée) ou une build ' " + CYAN + "recommandee" + JAUNE + "' (parfois une version majeure en moins ... Mais completement suportée) ? >>>" + NORMAL)
+		if version == "recommandee":
+			print (VERT + "Télechargement de la derniere version " + version + " de craft bukkit" + NORMAL)
+			print (JAUNE + "Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
+			urllib.urlretrieve('http://dl.bukkit.org/latest-rb/craftbukkit.jar', './serveur/craftbukkit.jar') # téléchargement de CB (latest - RB)
+			ok = True
+		elif version == "beta":
+			print (VERT + "Télechargement de la derniere version " + version + " de craft bukkit" + NORMAL)
+			print (JAUNE + "Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
+			urllib.urlretrieve('http://dl.bukkit.org/latest-beta/craftbukkit-beta.jar', './serveur/craftbukkit.jar') # téléchargement de CB (latest - beta)
+			ok = True
+		elif version == "dev":
+			print (VERT + "Télechargement de la derniere version " + version + " de craft bukkit" + NORMAL)
+			print (JAUNE + "Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
+			urllib.urlretrieve('http://dl.bukkit.org/latest-dev/craftbukkit-dev.jar', './serveur/craftbukkit.jar') # téléchargement de CB (latest - dev)
+			ok = True
+		else :
+			print (ROUGE + "Version " + version + " non trouvée ... Choisisez entre recommandee, beta et dev" + NORMAL)
+
 
 def generation(sleep):
 	print (VERT + "Attente de la generation des fichiers" + NORMAL)
@@ -305,7 +328,7 @@ print("\nLoading ...")
 chrono = time.time() # Demarrage du chrono
 ok = False
 while ok is not True:
-	start = raw_input(VERT + "Installation (install) ou statistiques (stats) >>>" + NORMAL)
+	start = raw_input(VERT + "Installation (install) ou statistiques (stats) ou mise a jour de craft bukkit (maj) ? >>>" + NORMAL)
 	if start == "install":
 		ok = True
 		install()
@@ -322,9 +345,11 @@ while ok is not True:
 		path = raw_input(VERT + "Deplacez ici votre fichier server.log et tapez entrer (pensez a enlever l'espace a la fin du path !) >>>" + NORMAL)
 		print (JAUNE + "Lancement du prossesus" + NORMAL)
 		mclp(path)
+	elif start == "maj":
+		maj()
 	else :
 		ok = False
-		print(ROUGE + "Soit install, soit stats :)")
+		print(ROUGE + "Soit install, soit stats, soit maj :)")
 
 
 
