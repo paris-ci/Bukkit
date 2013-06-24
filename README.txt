@@ -26,4 +26,4 @@ Enjoy !
 @stevenlegg https://github.com/stevenleeg (for MCLP)
 @pamasss https://github.com/pamasss (for the idea)
 
-A vous, qui telechargez ce plugin, signalez un bug... :)
+A vous, qui telechargez ce plugin, signalez un bug...
