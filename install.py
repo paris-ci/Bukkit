@@ -60,7 +60,7 @@ import operator
 
 def mclp(path):
 	sauvgarde = open("stats.txt","w")
-
+	nbligne = 0
 	actions = {
 		"login": re.compile("([0-9]{4})\-([0-9]{2})\-([0-9]{2}) ([0-2][0-9])\:([0-9]{2})\:([0-9]{2}) \[INFO\] ([A-z0-9]*) ?\[\/[0-9.]{4,15}\:[0-9]*\]"),
 	    "logout": re.compile("([0-9]{4})\-([0-9]{2})\-([0-9]{2}) ([0-2][0-9])\:([0-9]{2})\:([0-9]{2}) \[INFO\] ([A-z0-9]*) lost connection"),
@@ -70,6 +70,8 @@ def mclp(path):
 	online = {}
 	totals = {}
 	for line in f.readlines():
+		nbligne = nbligne + 1
+		print ("Lecture de la ligne " + str(nbligne)) 
 		regex = None
 		action = None
 		player = None
@@ -106,7 +108,7 @@ def mclp(path):
 					delta = time - online[player]
 					totals[player] += delta.seconds
 				online = {}
-
+	print ("Calcul des temps ...")
 	sort = sorted(totals.iteritems(), key=operator.itemgetter(1))
 	times = []
 	for player in sort:
@@ -137,7 +139,14 @@ def mclp(path):
 		times.append(time)
 
 	times.reverse()
-
+	sauvgarde.write("### Stats du serveur.log ### \n")
+	sauvgarde.write("### " + str(nbligne) + " lignes lues ! ### \n")
+	try :
+		sauvgarde.write("### " + time.strftime("%d/%m/%y %H:%M",time.localtime()) + " ###")
+	except:
+		print (ROUGE + "Petit probleme ..." + NORMAL)
+		pass
+	sauvgarde.write("\n\n\n")
 	counter = 0
 	for time in times:
 		counter = counter + 1
@@ -149,7 +158,7 @@ def mclp(path):
 
 ###############
 
-def maj():
+def majCB():
 	print(VERT + "Mise a jour du serveur !" + NORMAL)
 	ok = False
 	while ok is not True:
@@ -172,6 +181,7 @@ def maj():
 		else :
 			print (ROUGE + "Version " + version + " non trouvée ... Choisisez entre recommandee, beta et dev" + NORMAL)
 
+###############
 
 def generation(sleep):
 	print (VERT + "Attente de la generation des fichiers" + NORMAL)
@@ -228,6 +238,7 @@ def dlzip(nom,url):
 	os.system("rm -R ./serveur/serveur/plugins/" + nom) # Suppression du dossier décompressé vide
 	
 ###############
+
 def install():
 	print (VERT + "Instalation automatique de bukkit sous mac" + NORMAL)
 	print (VERT + "Preparation ... Appuyez sur entrer pour continuer" + NORMAL)
@@ -237,6 +248,7 @@ def install():
 	    z.extractall("serveur")
 	print (VERT + "Finition de l'extraction ..." + NORMAL)
 	os.system("rm -R ./serveur/__MACOSX") # Suppression d'un dossier inutile
+	os.system("chmod +x ./serveur/serveur/demarrer.command")
 	ok = False
 	try:
 		while ok is not True:
@@ -256,6 +268,9 @@ def install():
 				print (JAUNE + "Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
 				urllib.urlretrieve('http://dl.bukkit.org/latest-dev/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') # téléchargement de CB (latest - dev)
 				ok = True
+			elif version =="pass":
+				ok = True
+				print (ROUGE + "Aucun telechargement !!!!" + NORMAL)
 			else :
 				print (ROUGE + "Version " + version + " non trouvée ... Choisisez entre recommandee, beta et dev" + NORMAL)
 		print (VERT + "Lancement du serveur ... Veuillez ne rien toucher !" + NORMAL)
@@ -267,10 +282,11 @@ def install():
 
 ###############
 
-def plugins():
+def plugins(lancer):
 	## INSTALL ESSENTIALS ##
 	dlzip ("essentials","http://ess.ementalo.com/repository/download/bt2/.lastSuccessful/Essentials.zip?guest=1")
-	print (VERT + "Lancement du serveur pour creer la config essentials !" + NORMAL)
+	if lancer == True:
+		print (VERT + "Lancement du serveur pour creer la config essentials !" + NORMAL)
 	generation(40)
 	## INSTALL PEX ##
 	dlzip("pex","http://dev.bukkit.org/media/files/659/820/PermissionsEx-1.19.5-package.zip")
@@ -302,6 +318,30 @@ def config():
 	sauvgarde.write(str(op) + "\n")
 	sauvgarde.close()
 	print (VERT + "Operateur ajouté a la whitelist" + NORMAL)
+	proprietees = open("./serveur/serveur/server.properties","r")
+	temp = open("./serveur/serveur/server.properties.temp","a")
+	for ligne in proprietees:
+		if ligne == "allow-nether=true\n":
+			prop("Les joueurs doivent t'ils acceder au nether ? (oui/non) >>>","allow-nether=true","allow-nether=false","allow-nether=true")
+		elif ligne == "allow-flight=false\n":
+			prop("Les joueurs peuvent t'ils voler ? (oui/non) >>>","allow-flight=true","allow-flight=false","allow-flight=false")
+		elif ligne == "hardcore=false\n":
+			prop("Activer le mode hardcore? (oui/non) >>>","hardcore=true","hardcore=false","hardcore=false")
+		elif ligne == "online-mode=true\n":
+			prop("Accepter les versions crakées ? (oui/non) >>>","online-mode=true","online-mode=false","online-mode=true")
+		elif ligne == "pvp=true\n":
+			prop("Autoriser le PvP ? (oui/non) >>>","pvp=true","pvp=false","pvp=true")
+		elif ligne == "max-players=20\n":
+			slots = raw_input(VERT + "Indiquez le nombre de slots >>>" + NORMAL)
+			temp.write("max-players=" + slots)
+		elif "motd=" in ligne:
+			motd = raw_input(VERT + "Indiquez le motd >>>" + NORMAL)
+			temp.write("motd=" + motd)
+		else: # Ligne(s) qui ne correspond a rien
+			temp.write(ligne + "\n")
+	os.system("rm ./serveur/serveur/server.properties")
+	os.rename("./serveur/serveur/server.properties.temp", "./serveur/serveur/server.properties")
+	
 ###############
 
 def finition():
@@ -320,15 +360,41 @@ def finition():
 	tempsmin = float(temps)/float(60)
 	print (ROSE + "Temps passé sur l'install : " + str(temps) + " secondes soit " + str(tempsmin) + " minute(s)" + NORMAL) # Fin du chrono
 	
+	
+###############
+
+def prop(question,oui,non,defaut):
+	temp = open("./serveur/serveur/server.properties.temp","a")
+	reponse = raw_input(VERT + question + NORMAL)
+	if reponse == "non":
+		temp.write(non + "\n")
+	elif reponse == "oui":
+		temp.write(oui + "\n")
+	else :
+		print(ROUGE + "Entree non comprise : valeur par defaut" + NORMAL)
+		temp.write(defaut+ "\n")
+	
+###############
+
 def installprocess():
 	install()
 	print (JAUNE + "Passons a l'installation des plugins ..." + NORMAL)
-	plugins()
+	plugins(True)
 	print (JAUNE + "Passons a la configuration" + NORMAL)
 	config()
 	print (JAUNE + "Passons a la finition..." + NORMAL)
 	finition()
 	print (CYAN + "FIN DE L'INSTALATION !" + NORMAL)
+	
+###############
+
+def majPL():
+	os.mkdir("./serveur/serveur")
+	os.mkdir("./serveur/serveur/plugins")
+	plugins(False)
+	os.system("mv ./serveur/serveur/plugins/* ./serveur/plugins")
+	finition()
+
 
 ############## MAIN ##############
 
@@ -342,23 +408,29 @@ print("\nLoading ...")
 chrono = time.time() # Demarrage du chrono
 ok = False
 while ok is not True:
-	start = raw_input(VERT + "Installation (install) ou statistiques (stats) ou mise a jour de craft bukkit (maj) ? >>>" + NORMAL)
+	start = raw_input(VERT + "Installation (install) ou statistiques (stats) ou mise a jour de craft bukkit (majCB) ou Mise a jour des plugins (majPL)? >>>" + NORMAL)
 	if start == "install":
 		ok = True
 		installprocess()
-		
 	elif start == "stats":
 		ok = True
 		path = raw_input(VERT + "Deplacez ici votre fichier server.log et tapez entrer (pensez a enlever l'espace a la fin du path !) >>>" + NORMAL)
-		print (JAUNE + "Lancement du prossesus" + NORMAL)
+		print (JAUNE + "Lancement du processus" + NORMAL)
 		mclp(path)
-	elif start == "maj":
-		maj()
+	elif start == "majCB":
+		majCB()
+		ok = True
+	elif start == "majPL":
+		majPL()
+		ok = True
+ 	elif start == "config":
+  		config()
+  		ok = True
 	else :
 		ok = False
-		print(ROUGE + "Soit install, soit stats, soit maj :)")
+		print(ROUGE + "Soit install, soit stats, soit majCB ou majPL :)" + NORMAL)
 
-
+############################################################
 
 ######  ######  #######
 #       #    #  #
