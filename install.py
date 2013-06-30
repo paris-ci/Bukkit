@@ -238,17 +238,30 @@ def dlzip(nom,url):
 	os.system("rm -R ./serveur/serveur/plugins/" + nom) # Suppression du dossier décompressé vide
 	
 ###############
+	
+def createpath(path):
+	if not os.path.isdir(path):
+		os.mkdir(path)
+		
+###############
 
 def install():
 	print (VERT + "Instalation automatique de bukkit sous mac" + NORMAL)
-	print (VERT + "Preparation ... Appuyez sur entrer pour continuer" + NORMAL)
+	
+# 	print (VERT + "Preparation ... Appuyez sur entrer pour continuer" + NORMAL)
 #	start = raw_input(">>>") # Pour apres passer des arguments au boot si besoin : utiliser la variable start
-	print (VERT + "Extraction des fichiers indispensables" + NORMAL)
-	with zipfile.ZipFile('serveur.zip', "r") as z: # Extraction des fichiers indispensables
-	    z.extractall("serveur")
-	print (VERT + "Finition de l'extraction ..." + NORMAL)
-	os.system("rm -R ./serveur/__MACOSX") # Suppression d'un dossier inutile
+# 	print (VERT + "Extraction des fichiers indispensables" + NORMAL)
+# 	with zipfile.ZipFile('serveur.zip', "r") as z: # Extraction des fichiers indispensables
+# 	    z.extractall("serveur")
+# 	print (VERT + "Finition de l'extraction ..." + NORMAL)
+# 	os.system("rm -R ./serveur/__MACOSX") # Suppression d'un dossier inutile
+	createpath("./serveur")
+	createpath("./serveur/serveur")
+	command = open("./serveur/serveur/demarrer.command","w")
+	print (VERT + "Creation du script de demarrage !" + NORMAL)
+	command.write("""#!/bin/bash \n cd "$( dirname "$0" )"\njava -server -Xmx2G -jar ./craftbukkit.jar\n """)
 	os.system("chmod +x ./serveur/serveur/demarrer.command")
+	command.close()
 	ok = False
 	try:
 		while ok is not True:
@@ -319,7 +332,7 @@ def config():
 	sauvgarde.close()
 	print (VERT + "Operateur ajouté a la whitelist" + NORMAL)
 	proprietees = open("./serveur/serveur/server.properties","r")
-	temp = open("./serveur/serveur/server.properties.temp","a")
+	temp = open("./serveur/serveur/.server.properties.temp","a")
 	for ligne in proprietees:
 		if ligne == "allow-nether=true\n":
 			prop("Les joueurs doivent t'ils acceder au nether ? (oui/non) >>>","allow-nether=true","allow-nether=false","allow-nether=true")
@@ -340,7 +353,7 @@ def config():
 		else: # Ligne(s) qui ne correspond a rien
 			temp.write(ligne + "\n")
 	os.system("rm ./serveur/serveur/server.properties")
-	os.rename("./serveur/serveur/server.properties.temp", "./serveur/serveur/server.properties")
+	os.rename("./serveur/serveur/.server.properties.temp", "./serveur/serveur/server.properties")
 	
 ###############
 
@@ -364,7 +377,7 @@ def finition():
 ###############
 
 def prop(question,oui,non,defaut):
-	temp = open("./serveur/serveur/server.properties.temp","a")
+	temp = open("./serveur/serveur/.server.properties.temp","a")
 	reponse = raw_input(VERT + question + NORMAL)
 	if reponse == "non":
 		temp.write(non + "\n")
