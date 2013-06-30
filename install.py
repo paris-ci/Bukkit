@@ -5,41 +5,31 @@
 
 ############## VARS ##############
 
-VERT="\033[1;32m"
-NORMAL="\033[0;39m"
-ROUGE="\033[1;31m"
-ROSE="\033[1;35m"
-BLEU="\033[1;34m"
-BLANC="\033[0;02m"
-BLANCLAIR="\033[1;08m"
-JAUNE="\033[1;33m"
-CYAN="\033[1;36m"
-
-# default = "\033[0m"
-# # style
-# bold = "\033[1m"
-# underline = "\033[4m"
-# blink = "\033[5m"
-# reverse = "\033[7m"
-# concealed = "\033[8m"
-# # couleur texte
-# black = "\033[30m"
-# red = "\033[31m"
-# green = "\033[32m"
-# yellow = "\033[33m"
-# blue = "\033[34m"
-# magenta = "\033[35m"
-# cyan = "\033[36m"
-# white ="\033[37m"
-# #couleurfond
-# on_black = "\033[40m"
-# on_red = "\033[41m"
-# on_green = "\033[42m"
-# on_yellow = "\033[43m"
-# on_blue = "\033[44m"
-# on_magenta = "\033[45m"
-# on_cyan = "\033[46m"
-# on_white = "\033[47m"
+normal = "\033[0m"
+# style
+bold = "\033[1m"
+underline = "\033[4m"
+blink = "\033[5m"
+reverse = "\033[7m"
+concealed = "\033[8m"
+# couleur texte
+black = "\033[30m"
+red = "\033[31m"
+green = "\033[32m"
+yellow = "\033[33m"
+blue = "\033[34m"
+magenta = "\033[35m"
+cyan = "\033[36m"
+white ="\033[37m"
+#couleurfond
+on_black = "\033[40m"
+on_red = "\033[41m"
+on_green = "\033[42m"
+on_yellow = "\033[43m"
+on_blue = "\033[44m"
+on_magenta = "\033[45m"
+on_cyan = "\033[46m"
+on_white = "\033[47m"
 
 
 
@@ -52,9 +42,25 @@ import subprocess
 import re
 import datetime
 import operator
+import datetime
 
 ############## FUNC ##############
 
+###############
+
+
+def printinfo(message):
+	print( time.strftime("%H:%M:%S", time.gmtime()) + " [INFO] " + message)
+
+###############
+
+def printwarn(message):
+	print(yellow + time.strftime("%H:%M:%S", time.gmtime()) + " [ATTENTION] " + message + normal)
+
+###############
+
+def printerror(message):
+	print(red +  time.strftime("%H:%M:%S", time.gmtime()) + " [ERREUR] " + message + normal)
 
 ############### MCLP : https://github.com/stevenleeg/Minecraft-Log-Parser
 
@@ -71,7 +77,7 @@ def mclp(path):
 	totals = {}
 	for line in f.readlines():
 		nbligne = nbligne + 1
-		print ("Lecture de la ligne " + str(nbligne)) 
+		printinfo("Lecture de la ligne " + str(nbligne)) 
 		regex = None
 		action = None
 		player = None
@@ -108,7 +114,7 @@ def mclp(path):
 					delta = time - online[player]
 					totals[player] += delta.seconds
 				online = {}
-	print ("Calcul des temps ...")
+	printinfo("Calcul des temps ...")
 	sort = sorted(totals.iteritems(), key=operator.itemgetter(1))
 	times = []
 	for player in sort:
@@ -142,9 +148,9 @@ def mclp(path):
 	sauvgarde.write("### Stats du serveur.log ### \n")
 	sauvgarde.write("### " + str(nbligne) + " lignes lues ! ### \n")
 	try :
-		sauvgarde.write("### " + time.strftime("%d/%m/%y %H:%M",time.localtime()) + " ###")
+		sauvgarde.write("### " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()) + " ###")
 	except:
-		print (ROUGE + "Petit probleme ..." + NORMAL)
+		printerror("Petit probleme ...")
 		pass
 	sauvgarde.write("\n\n\n")
 	counter = 0
@@ -159,38 +165,41 @@ def mclp(path):
 ###############
 
 def majCB():
-	print(VERT + "Mise a jour du serveur !" + NORMAL)
+	printinfo("Mise a jour du serveur !")
 	ok = False
-	while ok is not True:
-		version = raw_input(JAUNE + "Quelle version de craft bukkit voulez vous ? Une build de '" + CYAN + "dev" + JAUNE + "' (completement non-supportées et parfois instables), Une build '" + CYAN + "beta" + JAUNE + "' (generalement a jour et suportée a moitiée) ou une build ' " + CYAN + "recommandee" + JAUNE + "' (parfois une version majeure en moins ... Mais completement suportée) ? >>>" + NORMAL)
-		if version == "recommandee":
-			print (VERT + "Télechargement de la derniere version " + version + " de craft bukkit" + NORMAL)
-			print (JAUNE + "Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
-			urllib.urlretrieve('http://dl.bukkit.org/latest-rb/craftbukkit.jar', './serveur/craftbukkit.jar') # téléchargement de CB (latest - RB)
-			ok = True
-		elif version == "beta":
-			print (VERT + "Télechargement de la derniere version " + version + " de craft bukkit" + NORMAL)
-			print (JAUNE + "Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
-			urllib.urlretrieve('http://dl.bukkit.org/latest-beta/craftbukkit-beta.jar', './serveur/craftbukkit.jar') # téléchargement de CB (latest - beta)
-			ok = True
-		elif version == "dev":
-			print (VERT + "Télechargement de la derniere version " + version + " de craft bukkit" + NORMAL)
-			print (JAUNE + "Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
-			urllib.urlretrieve('http://dl.bukkit.org/latest-dev/craftbukkit-dev.jar', './serveur/craftbukkit.jar') # téléchargement de CB (latest - dev)
-			ok = True
-		else :
-			print (ROUGE + "Version " + version + " non trouvée ... Choisisez entre recommandee, beta et dev" + NORMAL)
-
+	try:
+		while ok is not True:
+			version = raw_input("Quelle version de craft bukkit voulez vous ? Une build de '" + cyan + "dev" + normal + "' (completement non-supportées et parfois instables), Une build '" + cyan + "beta" + normal + "' (generalement a jour et suportée a moitiée) ou une build ' " + cyan + "recommandee" + normal + "' (parfois une version majeure en moins ... Mais completement suportée) ? >>>" )
+			if version == "recommandee":
+				printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+				printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+				urllib.urlretrieve('http://dl.bukkit.org/latest-rb/craftbukkit.jar', './serveur/craftbukkit.jar') # téléchargement de CB (latest - RB)
+				ok = True
+			elif version == "beta":
+				printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+				printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+				urllib.urlretrieve('http://dl.bukkit.org/latest-beta/craftbukkit-beta.jar', './serveur/craftbukkit.jar') # téléchargement de CB (latest - beta)
+				ok = True
+			elif version == "dev":
+				printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+				printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+				urllib.urlretrieve('http://dl.bukkit.org/latest-dev/craftbukkit-dev.jar', './serveur/craftbukkit.jar') # téléchargement de CB (latest - dev)
+				ok = True
+			else :
+				printerror ("Version " + version + " non trouvée ... Choisisez entre recommandee, beta et dev")
+	except:
+		printerror("Dossier serveur introuvable : lance une installation !")
+		installprocess()
 ###############
 
 def generation(sleep):
-	print (VERT + "Attente de la generation des fichiers" + NORMAL)
+	printinfo("Attente de la generation des fichiers")
 	subprocess.call(["open", "./serveur/serveur/demarrer.command"]) # Lancement du serveur
-	print (VERT + "Patientez " + str(sleep) + " secondes ..." + NORMAL)
+	printinfo ("Patientez " + str(sleep) + " secondes ...")
 	progressbar(sleep) # Barre de progression
-	print (VERT + "Arret du serveur" + NORMAL)
-	os.system("killall java") # Quitter java
-	print (ROUGE + "Vous pouvez quitter le teminal <serveur> (celui avec [OPERATION TERMINEE] et sans couleurs)" + NORMAL)
+	printinfo ("Arret du serveur")
+	os.system ("killall java") # Quitter java
+	printwarn ("Vous pouvez quitter le teminal <serveur> (celui avec [OPERATION TERMINEE] et sans couleurs)")
 	
 ###############
 
@@ -212,29 +221,29 @@ def progressbar(longueur):
 ###############
 
 def dl(nom,url):
-	print (VERT + "Installation de " + nom +" !" + NORMAL)
-	print (JAUNE + "Cela peut prendre 1 a 2 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
+	printinfo ("Installation de " + nom +" !")
+	printwarn ("Cela peut prendre 1 a 2 minutes ... Veuillez patienter et ne pas aretter le processus")
 	urllib.urlretrieve(url, './serveur/serveur/plugins/' + nom + ".jar") #DL + nom
-	print (VERT + "Téléchargement terminé" + NORMAL)
-	print (VERT + nom + " installé" + NORMAL)
+	printinfo ("Téléchargement terminé")
+	printinfo (nom + " installé")
 	
 ###############
 
 def dlzip(nom,url):
-	print (VERT + "Installation de " + nom + " !" + NORMAL)
-	print (JAUNE + "Cela peut prendre 1 a 2 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
+	printinfo ("Installation de " + nom + " !")
+	printinfo ("Cela peut prendre 1 a 2 minutes ... Veuillez patienter et ne pas aretter le processus")
 	urllib.urlretrieve(url, './serveur/serveur/plugins/' + nom + ".zip")
-	print (VERT + "Téléchargement terminé" + NORMAL)
-	print (VERT + "Extraction du .zip" + NORMAL)
+	printinfo ("Téléchargement terminé")
+	printinfo ("Extraction du .zip")
 	with zipfile.ZipFile('./serveur/serveur/plugins/' + nom +'.zip', "r") as z: # Extraction des fichiers indispensables
 	    z.extractall("./serveur/serveur/plugins/" + nom)
-	print (VERT + nom + " installé" + NORMAL)
-	print (VERT + "Effacement de l'archive" + NORMAL)
+	printinfo (nom + " installé")
+	printinfo ("Effacement de l'archive")
 	os.system("rm ./serveur/serveur/plugins/" + nom + ".zip") # Suppression du zip
-	print (VERT + "Effacement terminé" + NORMAL)
-	print (VERT + "Deplacement des plugins" + NORMAL) 
+	printinfo ("Effacement terminé")
+	printinfo ("Deplacement des plugins") 
 	os.system("mv ./serveur/serveur/plugins/" + nom + "/* ./serveur/serveur/plugins") # Sortie du dossier décompressé
-	print (VERT + """Suppression du dossier """ + nom + """ inutile""" + NORMAL)
+	printinfo ("""Suppression du dossier """ + nom + """ inutile""")
 	os.system("rm -R ./serveur/serveur/plugins/" + nom) # Suppression du dossier décompressé vide
 	
 ###############
@@ -246,52 +255,40 @@ def createpath(path):
 ###############
 
 def install():
-	print (VERT + "Instalation automatique de bukkit sous mac" + NORMAL)
-	
-# 	print (VERT + "Preparation ... Appuyez sur entrer pour continuer" + NORMAL)
-#	start = raw_input(">>>") # Pour apres passer des arguments au boot si besoin : utiliser la variable start
-# 	print (VERT + "Extraction des fichiers indispensables" + NORMAL)
-# 	with zipfile.ZipFile('serveur.zip', "r") as z: # Extraction des fichiers indispensables
-# 	    z.extractall("serveur")
-# 	print (VERT + "Finition de l'extraction ..." + NORMAL)
-# 	os.system("rm -R ./serveur/__MACOSX") # Suppression d'un dossier inutile
+	printinfo ("Instalation automatique de bukkit sous mac" )
 	createpath("./serveur")
 	createpath("./serveur/serveur")
 	command = open("./serveur/serveur/demarrer.command","w")
-	print (VERT + "Creation du script de demarrage !" + NORMAL)
+	printinfo ("Creation du script de demarrage !")
 	command.write("""#!/bin/bash \n cd "$( dirname "$0" )"\njava -server -Xmx2G -jar ./craftbukkit.jar\n """)
 	os.system("chmod +x ./serveur/serveur/demarrer.command")
 	command.close()
 	ok = False
-	try:
-		while ok is not True:
-			version = raw_input(JAUNE + "Quelle version de craft bukkit voulez vous ? Une build de '" + CYAN + "dev" + JAUNE + "' (completement non-supportées et parfois instables), Une build '" + CYAN + "beta" + JAUNE + "' (generalement a jour et suportée a moitiée) ou une build ' " + CYAN + "recommandee" + JAUNE + "' (parfois une version majeure en moins ... Mais completement suportée) ? >>>" + NORMAL)
-			if version == "recommandee":
-				print (VERT + "Télechargement de la derniere version " + version + " de craft bukkit" + NORMAL)
-				print (JAUNE + "Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
-				urllib.urlretrieve('http://dl.bukkit.org/latest-rb/craftbukkit.jar', './serveur/serveur/craftbukkit.jar') # téléchargement de CB (latest - RB)
-				ok = True
-			elif version == "beta":
-				print (VERT + "Télechargement de la derniere version " + version + " de craft bukkit" + NORMAL)
-				print (JAUNE + "Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
-				urllib.urlretrieve('http://dl.bukkit.org/latest-beta/craftbukkit-beta.jar', './serveur/serveur/craftbukkit.jar') # téléchargement de CB (latest - beta)
-				ok = True
-			elif version == "dev":
-				print (VERT + "Télechargement de la derniere version " + version + " de craft bukkit" + NORMAL)
-				print (JAUNE + "Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus" + NORMAL)
-				urllib.urlretrieve('http://dl.bukkit.org/latest-dev/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') # téléchargement de CB (latest - dev)
-				ok = True
-			elif version =="pass":
-				ok = True
-				print (ROUGE + "Aucun telechargement !!!!" + NORMAL)
-			else :
-				print (ROUGE + "Version " + version + " non trouvée ... Choisisez entre recommandee, beta et dev" + NORMAL)
-		print (VERT + "Lancement du serveur ... Veuillez ne rien toucher !" + NORMAL)
-		generation(60) # Generation des fichiers par un lancement du serveur
+	while ok is not True:
+		version = raw_input("Quelle version de craft bukkit voulez vous ? Une build de '" + cyan + "dev" + normal + "' (completement non-supportées et parfois instables), Une build '" + cyan + "beta" + normal + "' (generalement a jour et suportée a moitiée) ou une build ' " + cyan + "recommandee" + normal + "' (parfois une version majeure en moins ... Mais completement suportée) ? >>>" )
+		if version == "recommandee":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/latest-rb/craftbukkit.jar', './serveur/serveur/craftbukkit.jar') # téléchargement de CB (latest - RB)
+			ok = True
+		elif version == "beta":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/latest-beta/craftbukkit-beta.jar', './serveur/serveur/craftbukkit.jar') # téléchargement de CB (latest - beta)
+			ok = True
+		elif version == "dev":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/latest-dev/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') # téléchargement de CB (latest - dev)
+			ok = True
+		elif version =="pass":
+			ok = True
+			printwarn ("Aucun telechargement !!!!")
+		else :
+			printerror("Version " + version + " non trouvée ... Choisisez entre recommandee, beta et dev")
+	printinfo ("Lancement du serveur ... Veuillez ne rien toucher !")
+	generation(60) # Generation des fichiers par un lancement du serveur
 
-	except:
-		print(ROUGE + "Erreur : le dossier serveur n'as pas été trouvé ! Lancez d'abord une installation" + NORMAL)
-		installprocess()
 
 ###############
 
@@ -299,7 +296,7 @@ def plugins(lancer):
 	## INSTALL ESSENTIALS ##
 	dlzip ("essentials","http://ess.ementalo.com/repository/download/bt2/.lastSuccessful/Essentials.zip?guest=1")
 	if lancer == True:
-		print (VERT + "Lancement du serveur pour creer la config essentials !" + NORMAL)
+		printinfo ("Lancement du serveur pour creer la config essentials !")
 	generation(40)
 	## INSTALL PEX ##
 	dlzip("pex","http://dev.bukkit.org/media/files/659/820/PermissionsEx-1.19.5-package.zip")
@@ -320,17 +317,17 @@ def plugins(lancer):
 ###############
 
 def config():
-	print (VERT + "Genération des dernieres configurations" + NORMAL)
+	printinfo ("Genération des dernieres configurations")
 	generation(30)
-	op = raw_input(BLEU + "Entrez le nom de l'operateur du serveur >>>" + NORMAL)
+	op = raw_input("Entrez le nom de l'operateur du serveur >>>")
 	sauvgarde = open("./serveur/serveur/ops.txt","a")
 	sauvgarde.write(str(op) + "\n")
 	sauvgarde.close()
-	print (VERT + "Operateur ajouté a la liste des operateurs...")
+	printinfo ("Operateur ajouté a la liste des operateurs...")
 	sauvgarde = open("./serveur/serveur/white-list.txt","a")
 	sauvgarde.write(str(op) + "\n")
 	sauvgarde.close()
-	print (VERT + "Operateur ajouté a la whitelist" + NORMAL)
+	printinfo ("Operateur ajouté a la whitelist")
 	proprietees = open("./serveur/serveur/server.properties","r")
 	temp = open("./serveur/serveur/.server.properties.temp","a")
 	for ligne in proprietees:
@@ -345,10 +342,10 @@ def config():
 		elif ligne == "pvp=true\n":
 			prop("Autoriser le PvP ? (oui/non) >>>","pvp=true","pvp=false","pvp=true")
 		elif ligne == "max-players=20\n":
-			slots = raw_input(VERT + "Indiquez le nombre de slots >>>" + NORMAL)
+			slots = raw_input("Indiquez le nombre de slots >>>")
 			temp.write("max-players=" + slots)
 		elif "motd=" in ligne:
-			motd = raw_input(VERT + "Indiquez le motd >>>" + NORMAL)
+			motd = raw_input("Indiquez le motd >>>")
 			temp.write("motd=" + motd)
 		else: # Ligne(s) qui ne correspond a rien
 			temp.write(ligne + "\n")
@@ -358,46 +355,46 @@ def config():
 ###############
 
 def finition():
-	print (VERT + "Génération des derniers fichiers !" + NORMAL)
+	printinfo ("Génération des derniers fichiers !")
 	os.system("rm -R ./serveur/serveur/plugins/Modifyworld.jar")
 	generation(60)
-	print (JAUNE + "Deplacement des fichiers serveurs ..." + NORMAL)
+	printinfo ("Deplacement des fichiers serveurs ...")
 	os.system("mv ./serveur/serveur/* ./serveur")
-	print (VERT + "Supression du dossier temporaire" + NORMAL)
+	printinfo ("Supression du dossier temporaire")
 	os.system("rm -R ./serveur/serveur")
-	print (VERT + "Suppression des readme" + NORMAL)
+	printinfo ("Suppression des readme")
 	os.system("rm -R ./serveur/plugins/CHANGELOG.txt")
 	os.system("rm -R ./serveur/plugins/LICENSE.txt")
 	os.system("rm -R ./serveur/plugins/README.html")
 	temps = float(time.time()) - float(chrono)
 	tempsmin = float(temps)/float(60)
-	print (ROSE + "Temps passé sur l'install : " + str(temps) + " secondes soit " + str(tempsmin) + " minute(s)" + NORMAL) # Fin du chrono
+	printinfo ("Temps passé sur l'install : " + str(temps) + " secondes soit " + str(tempsmin) + " minute(s)") # Fin du chrono
 	
 	
 ###############
 
 def prop(question,oui,non,defaut):
 	temp = open("./serveur/serveur/.server.properties.temp","a")
-	reponse = raw_input(VERT + question + NORMAL)
+	reponse = raw_input(question)
 	if reponse == "non":
 		temp.write(non + "\n")
 	elif reponse == "oui":
 		temp.write(oui + "\n")
 	else :
-		print(ROUGE + "Entree non comprise : valeur par defaut" + NORMAL)
+		printerror("Entree non comprise : valeur par defaut")
 		temp.write(defaut+ "\n")
 	
 ###############
 
 def installprocess():
 	install()
-	print (JAUNE + "Passons a l'installation des plugins ..." + NORMAL)
+	printinfo ("Passons a l'installation des plugins ...")
 	plugins(True)
-	print (JAUNE + "Passons a la configuration" + NORMAL)
+	printinfo ("Passons a la configuration")
 	config()
-	print (JAUNE + "Passons a la finition..." + NORMAL)
+	printinfo ("Passons a la finition...")
 	finition()
-	print (CYAN + "FIN DE L'INSTALATION !" + NORMAL)
+	printinfo ("FIN DE L'INSTALATION !")
 	
 ###############
 
@@ -416,19 +413,18 @@ def majPL():
 # #   # #    #   #        #      #  #  #
 #  # #  #   #######       #      #   # #
 #   #   #  #       #  #########  #    ##
-
-print("\nLoading ...")
+printinfo("Loading ...")
 chrono = time.time() # Demarrage du chrono
 ok = False
 while ok is not True:
-	start = raw_input(VERT + "Installation (install) ou statistiques (stats) ou mise a jour de craft bukkit (majCB) ou Mise a jour des plugins (majPL)? >>>" + NORMAL)
+	start = raw_input("Installation (install) ou statistiques (stats) ou mise a jour de craft bukkit (majCB) ou Mise a jour des plugins (majPL)? >>>")
 	if start == "install":
 		ok = True
 		installprocess()
 	elif start == "stats":
 		ok = True
-		path = raw_input(VERT + "Deplacez ici votre fichier server.log et tapez entrer (pensez a enlever l'espace a la fin du path !) >>>" + NORMAL)
-		print (JAUNE + "Lancement du processus" + NORMAL)
+		path = raw_input("Deplacez ici votre fichier server.log et tapez entrer (pensez a enlever l'espace a la fin du path !) >>>")
+		printinfo ("Lancement du processus : cela peut prendre du temps !")
 		mclp(path)
 	elif start == "majCB":
 		majCB()
@@ -441,7 +437,7 @@ while ok is not True:
   		ok = True
 	else :
 		ok = False
-		print(ROUGE + "Soit install, soit stats, soit majCB ou majPL :)" + NORMAL)
+		printerror("Soit install, soit stats, soit majCB ou majPL :)")
 
 ############################################################
 
