@@ -42,26 +42,25 @@ import subprocess
 import re
 import datetime
 import operator
-import datetime
+
+
+
 
 ############## FUNC ##############
 
-###############
-
-
 def printinfo(message):
-	print( time.strftime("%H:%M:%S", time.gmtime()) + " [INFO] " + message)
-
+	print(time.strftime("%H:%M:%S", time.gmtime()) + " [INFO] " + message)
+	log.write(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime()) + " [INFO] " + message + "\n")
 ###############
 
 def printwarn(message):
 	print(yellow + time.strftime("%H:%M:%S", time.gmtime()) + " [ATTENTION] " + message + normal)
-
+	log.write(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime()) + " [ATTENTION] " + message + "\n")
 ###############
 
 def printerror(message):
 	print(red +  time.strftime("%H:%M:%S", time.gmtime()) + " [ERREUR] " + message + normal)
-
+	log.write(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime()) + " [ERREUR] " + message + "\n")
 ############### MCLP : https://github.com/stevenleeg/Minecraft-Log-Parser
 
 def mclp(path):
@@ -148,7 +147,7 @@ def mclp(path):
 	sauvgarde.write("### Stats du serveur.log ### \n")
 	sauvgarde.write("### " + str(nbligne) + " lignes lues ! ### \n")
 	try :
-		sauvgarde.write("### " + time.strftime("%Y-%m-%d %H:%M:%S", time.gmtime()) + " ###")
+		sauvgarde.write("### " + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime()) + " ###")
 	except:
 		printerror("Petit probleme ...")
 		pass
@@ -297,7 +296,7 @@ def plugins(lancer):
 	dlzip ("essentials","http://ess.ementalo.com/repository/download/bt2/.lastSuccessful/Essentials.zip?guest=1")
 	if lancer == True:
 		printinfo ("Lancement du serveur pour creer la config essentials !")
-	generation(40)
+		generation(40)
 	## INSTALL PEX ##
 	dlzip("pex","http://dev.bukkit.org/media/files/659/820/PermissionsEx-1.19.5-package.zip")
 	## INSTALL WE ##
@@ -399,13 +398,31 @@ def installprocess():
 ###############
 
 def majPL():
-	os.mkdir("./serveur/serveur")
-	os.mkdir("./serveur/serveur/plugins")
+	try:
+		os.mkdir("./serveur/serveur")
+		os.mkdir("./serveur/serveur/plugins")
+	except:
+		printerror("Hummm ... Les dossiers sont deja crées ?")
+		pass
 	plugins(False)
 	os.system("mv ./serveur/serveur/plugins/* ./serveur/plugins")
 	finition()
-
-
+	
+###############
+# 
+# def tbg(path):
+# 	leaderboard = open(path,"r")
+# 	joueurs = {}
+# 	for ligne in leaderboard:
+# 		count = 0
+# 		print ligne
+# 		for ligne_ in leaderboard:
+# 			print ligne_
+# 			if ligne_ == ligne:
+# 				count = count + 1
+# 		printinfo (str(ligne) + " a gagné " + str(count) + " fois !") 
+		
+	
 ############## MAIN ##############
 
 #       #      #      #########  ##    #
@@ -413,7 +430,12 @@ def majPL():
 # #   # #    #   #        #      #  #  #
 #  # #  #   #######       #      #   # #
 #   #   #  #       #  #########  #    ##
+
+
+
+log = open("./log.txt","a")
 printinfo("Loading ...")
+
 chrono = time.time() # Demarrage du chrono
 ok = False
 while ok is not True:
@@ -435,9 +457,15 @@ while ok is not True:
  	elif start == "config":
   		config()
   		ok = True
+#   	elif start == "tbg":
+#   		path = raw_input("Deplacez ici votre fichier leaderboard et tapez entrer (pensez a enlever l'espace a la fin du path !) >>>")
+# 		printinfo ("Lancement du processus")
+# 		tbg(path)
 	else :
 		ok = False
 		printerror("Soit install, soit stats, soit majCB ou majPL :)")
+log.close()
+
 
 ############################################################
 
