@@ -5,6 +5,7 @@
 
 ############## VARS ##############
 
+
 normal = "\033[0m"
 # style
 bold = "\033[1m"
@@ -31,6 +32,7 @@ on_magenta = "\033[45m"
 on_cyan = "\033[46m"
 on_white = "\033[47m"
 
+############# IMPORT #############
 
 
 import sys
@@ -44,38 +46,36 @@ import datetime
 import operator
 
 
-
-
 ############## FUNC ##############
 
-def printinfo(message):
-	print(time.strftime("%H:%M:%S", time.gmtime()) + " [INFO] " + message)
-	log.write(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime()) + " [INFO] " + message + "\n")
+def printinfo(message): # Print formaté
+	print(time.strftime("%H:%M:%S", time.gmtime()) + " [INFO] " + message) # Ici : heure + [INFO] et le message
+	log.write(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime()) + " [INFO] " + message + "\n") # Meme chose dans le log mais avec la date !
 	
 ###############
 
 def printwarn(message):
-	print(yellow + time.strftime("%H:%M:%S", time.gmtime()) + " [ATTENTION] " + message + normal)
-	log.write(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime()) + " [ATTENTION] " + message + "\n")
+	print(yellow + time.strftime("%H:%M:%S", time.gmtime()) + " [ATTENTION] " + message + normal) # Cf printinfo() mais avec couleurs
+	log.write(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime()) + " [ATTENTION] " + message + "\n") # On enleve ls couleurs pour le log !
 	
 ###############
 
 def printerror(message):
-	print(red +  time.strftime("%H:%M:%S", time.gmtime()) + " [ERREUR] " + message + normal)
+	print(red +  time.strftime("%H:%M:%S", time.gmtime()) + " [ERREUR] " + message + normal) # Cf printinfo() et printwarn()
 	log.write(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime()) + " [ERREUR] " + message + "\n")
 	
 ###############
 
 def question(message):
-	reponse = raw_input(green + time.strftime("%H:%M:%S", time.gmtime()) + " [QUES] " + message + normal)
+	reponse = raw_input(green + time.strftime("%H:%M:%S", time.gmtime()) + " [QUES] " + message + normal) # Ici meme chose que printwarn() mais avec un raw_input
 	log.write(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime()) + " [QUEST] " + message + "\n")
 	return reponse
 	
 ############### MCLP : https://github.com/stevenleeg/Minecraft-Log-Parser
 
 def mclp(path):
-	sauvgarde = open("stats.txt","w")
-	nbligne = 0
+	sauvgarde = open("stats.txt","w") # Ouverture du fichier pour enregistrer les stats
+	nbligne = 0 # Compteur de lignes
 	actions = {
 		"login": re.compile("([0-9]{4})\-([0-9]{2})\-([0-9]{2}) ([0-2][0-9])\:([0-9]{2})\:([0-9]{2}) \[INFO\] ([A-z0-9]*) ?\[\/[0-9.]{4,15}\:[0-9]*\]"),
 	    "logout": re.compile("([0-9]{4})\-([0-9]{2})\-([0-9]{2}) ([0-2][0-9])\:([0-9]{2})\:([0-9]{2}) \[INFO\] ([A-z0-9]*) lost connection"),
@@ -154,12 +154,12 @@ def mclp(path):
 		times.append(time)
 
 	times.reverse()
-	sauvgarde.write("### Stats du serveur.log ### \n")
+	sauvgarde.write("### Stats du serveur.log ### \n") # Mise en forme du fichier de sauvegarde
 	sauvgarde.write("### " + str(nbligne) + " lignes lues ! ### \n")
 	try :
 		sauvgarde.write("### " + time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime()) + " ###")
-	except:
-		printerror("Petit probleme ...")
+	except: # En cas de probleme avec la date ...
+		printerror("Petit probleme ...") 
 		pass
 	sauvgarde.write("\n\n\n")
 	counter = 0
@@ -198,7 +198,7 @@ def majCB():
 				printerror ("Version " + version + " non trouvée ... Choisisez entre recommandee, beta et dev")
 	except:
 		printerror("Dossier serveur introuvable : lance une installation !")
-		installprocess()
+		installprocess() # Et ca se fait tout seul ! Génial non ?
 ###############
 
 def generation(sleep):
@@ -241,7 +241,7 @@ def dl(nom,url):
 def dlzip(nom,url):
 	printinfo ("Installation de " + nom + " !")
 	printinfo ("Cela peut prendre 1 a 2 minutes ... Veuillez patienter et ne pas aretter le processus")
-	urllib.urlretrieve(url, './serveur/serveur/plugins/' + nom + ".zip")
+	urllib.urlretrieve(url, './serveur/serveur/plugins/' + nom + ".zip") # DL
 	printinfo ("Téléchargement terminé")
 	printinfo ("Extraction du .zip")
 	with zipfile.ZipFile('./serveur/serveur/plugins/' + nom +'.zip', "r") as z: # Extraction des fichiers indispensables
@@ -339,7 +339,7 @@ def config():
 	printinfo ("Operateur ajouté a la whitelist")
 	proprietees = open("./serveur/serveur/server.properties","r")
 	temp = open("./serveur/serveur/.server.properties.temp","a")
-	for ligne in proprietees:
+	for ligne in proprietees: # Ici on touche au serveur.properties
 		if ligne == "allow-nether=true\n":
 			prop("Les joueurs doivent t'ils acceder au nether ? (oui/non) >>>","allow-nether=true","allow-nether=false","allow-nether=true")
 		elif ligne == "allow-flight=false\n":
@@ -356,7 +356,7 @@ def config():
 		elif "motd=" in ligne:
 			motd = question("Indiquez le motd >>>")
 			temp.write("motd=" + motd)
-		else: # Ligne(s) qui ne correspond a rien
+		else: # Ligne(s) qui ne correspond a rien = retranscrites a l'identique !
 			temp.write(ligne + "\n")
 	os.system("rm ./serveur/serveur/server.properties")
 	os.rename("./serveur/serveur/.server.properties.temp", "./serveur/serveur/server.properties")
@@ -365,7 +365,7 @@ def config():
 
 def finition():
 	printinfo ("Génération des derniers fichiers !")
-	os.system("rm -R ./serveur/serveur/plugins/Modifyworld.jar")
+	os.system("rm -R ./serveur/serveur/plugins/Modifyworld.jar") # Plugin restricteur tres embettant ...
 	generation(60)
 	printinfo ("Deplacement des fichiers serveurs ...")
 	os.system("mv ./serveur/serveur/* ./serveur")
@@ -382,9 +382,9 @@ def finition():
 	
 ###############
 
-def prop(question,oui,non,defaut):
+def prop(question_,oui,non,defaut): # Fonction de mise a jour du server.properties
 	temp = open("./serveur/serveur/.server.properties.temp","a")
-	reponse = question(question)
+	reponse = question(question_) # Attention a ne pas confondre avec la fonction !!
 	if reponse == "non":
 		temp.write(non + "\n")
 	elif reponse == "oui":
@@ -409,7 +409,7 @@ def installprocess():
 
 def majPL():
 	try:
-		os.mkdir("./serveur/serveur")
+		os.mkdir("./serveur/serveur") # Creation des dossiers temporaires
 		os.mkdir("./serveur/serveur/plugins")
 	except:
 		printerror("Hummm ... Les dossiers sont deja crées ?")
@@ -421,11 +421,12 @@ def majPL():
 ###############
 # 
 def tbg(path):
-	leaderboard = open(path,"r")
+	leaderboard = open(path,"r") #Ouverture du fichier
 	joueurs = []
 	for ligne in leaderboard:
 	
-		joueurs.append(ligne.replace("\n",""))
+		joueurs.append(ligne.replace("\n","")) # Ficher dans une liste
+	
 	joueurs.sort() # Tout est bien rangé !
 	joueurprecedent = ""
 	for joueur in joueurs:
@@ -442,10 +443,11 @@ def tbg(path):
 
 
 
-log = open("./log.txt","a")
+log = open("./log.txt","a") # Creation - ouverture du fichier de log
 printinfo("Loading ...")
 
- # Demarrage du chrono
+
+# Menu un peu moche ...
 ok = False
 while ok is not True:
 	chrono = time.time()
@@ -488,7 +490,7 @@ while ok is not True:
 	else:
 		printerror("Je n'ai pas compris votre choix !")
 
-log.close()
+log.close() # Au revoir les logs !
 
 
 ############################################################
@@ -499,3 +501,4 @@ log.close()
 #       #    #  #
 ######  ######  #
 
+# Enfin !
