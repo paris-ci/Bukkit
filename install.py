@@ -410,19 +410,18 @@ def majPL():
 	
 ###############
 # 
-# def tbg(path):
-# 	leaderboard = open(path,"r")
-# 	joueurs = {}
-# 	for ligne in leaderboard:
-# 		count = 0
-# 		print ligne
-# 		for ligne_ in leaderboard:
-# 			print ligne_
-# 			if ligne_ == ligne:
-# 				count = count + 1
-# 		printinfo (str(ligne) + " a gagné " + str(count) + " fois !") 
-		
+def tbg(path):
+	leaderboard = open(path,"r")
+	joueurs = []
+	for ligne in leaderboard:
 	
+		joueurs.append(ligne.replace("\n",""))
+	joueurs.sort() # Tout est bien rangé !
+	joueurprecedent = ""
+	for joueur in joueurs:
+		if not joueurprecedent == joueur :
+			printinfo(joueur + "a gagné " + str(joueurs.count(joueur)) + " fois")
+		joueurprecedent = joueur
 ############## MAIN ##############
 
 #       #      #      #########  ##    #
@@ -439,15 +438,15 @@ printinfo("Loading ...")
 chrono = time.time() # Demarrage du chrono
 ok = False
 while ok is not True:
-	start = raw_input("Installation (install) ou statistiques (stats) ou mise a jour de craft bukkit (majCB) ou Mise a jour des plugins (majPL)? >>>")
+	start = raw_input("Installation (install) ou statistiques (stats) ou mise a jour de craft bukkit (majCB) ou Mise a jour des plugins (majPL) ou une fonction de stat pour le plugin The bukkitgames (tbg) ? >>>")
 	if start == "install":
 		ok = True
 		installprocess()
 	elif start == "stats":
 		ok = True
-		path = raw_input("Deplacez ici votre fichier server.log et tapez entrer (pensez a enlever l'espace a la fin du path !) >>>")
+		path = raw_input("Deplacez ici votre fichier server.log et tapez entrer >>>")
 		printinfo ("Lancement du processus : cela peut prendre du temps !")
-		mclp(path)
+		mclp(path.replace(" ",""))
 	elif start == "majCB":
 		majCB()
 		ok = True
@@ -457,13 +456,13 @@ while ok is not True:
  	elif start == "config":
   		config()
   		ok = True
-#   	elif start == "tbg":
-#   		path = raw_input("Deplacez ici votre fichier leaderboard et tapez entrer (pensez a enlever l'espace a la fin du path !) >>>")
-# 		printinfo ("Lancement du processus")
-# 		tbg(path)
+  	elif start == "tbg":
+  		path = raw_input("Deplacez ici votre fichier leaderboard et tapez entrer >>>")
+		printinfo ("Lancement du processus")
+		tbg(path.replace(" ",""))
 	else :
 		ok = False
-		printerror("Soit install, soit stats, soit majCB ou majPL :)")
+		printerror("Soit install, soit stats, soit majCB, soit majPL, soit tbg :)")
 log.close()
 
 
