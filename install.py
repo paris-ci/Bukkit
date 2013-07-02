@@ -51,16 +51,26 @@ import operator
 def printinfo(message):
 	print(time.strftime("%H:%M:%S", time.gmtime()) + " [INFO] " + message)
 	log.write(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime()) + " [INFO] " + message + "\n")
+	
 ###############
 
 def printwarn(message):
 	print(yellow + time.strftime("%H:%M:%S", time.gmtime()) + " [ATTENTION] " + message + normal)
 	log.write(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime()) + " [ATTENTION] " + message + "\n")
+	
 ###############
 
 def printerror(message):
 	print(red +  time.strftime("%H:%M:%S", time.gmtime()) + " [ERREUR] " + message + normal)
 	log.write(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime()) + " [ERREUR] " + message + "\n")
+	
+###############
+
+def question(message):
+	reponse = raw_input(green + time.strftime("%H:%M:%S", time.gmtime()) + " [QUES] " + message + normal)
+	log.write(time.strftime("%d-%m-%Y %H:%M:%S", time.gmtime()) + " [QUEST] " + message + "\n")
+	return reponse
+	
 ############### MCLP : https://github.com/stevenleeg/Minecraft-Log-Parser
 
 def mclp(path):
@@ -168,7 +178,7 @@ def majCB():
 	ok = False
 	try:
 		while ok is not True:
-			version = raw_input("Quelle version de craft bukkit voulez vous ? Une build de '" + cyan + "dev" + normal + "' (completement non-supportées et parfois instables), Une build '" + cyan + "beta" + normal + "' (generalement a jour et suportée a moitiée) ou une build ' " + cyan + "recommandee" + normal + "' (parfois une version majeure en moins ... Mais completement suportée) ? >>>" )
+			version = question("Quelle version de craft bukkit voulez vous ? Une build de '" + cyan + "dev" + normal + "' (completement non-supportées et parfois instables), Une build '" + cyan + "beta" + normal + "' (generalement a jour et suportée a moitiée) ou une build ' " + cyan + "recommandee" + normal + "' (parfois une version majeure en moins ... Mais completement suportée) ? >>>" )
 			if version == "recommandee":
 				printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
 				printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
@@ -264,7 +274,7 @@ def install():
 	command.close()
 	ok = False
 	while ok is not True:
-		version = raw_input("Quelle version de craft bukkit voulez vous ? Une build de '" + cyan + "dev" + normal + "' (completement non-supportées et parfois instables), Une build '" + cyan + "beta" + normal + "' (generalement a jour et suportée a moitiée) ou une build ' " + cyan + "recommandee" + normal + "' (parfois une version majeure en moins ... Mais completement suportée) ? >>>" )
+		version = question("Quelle version de craft bukkit voulez vous ? Une build de '" + cyan + "dev" + normal + "' (completement non-supportées et parfois instables), Une build '" + cyan + "beta" + normal + "' (generalement a jour et suportée a moitiée) ou une build ' " + cyan + "recommandee" + normal + "' (parfois une version majeure en moins ... Mais completement suportée) ? >>>" )
 		if version == "recommandee":
 			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
 			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
@@ -318,7 +328,7 @@ def plugins(lancer):
 def config():
 	printinfo ("Genération des dernieres configurations")
 	generation(30)
-	op = raw_input("Entrez le nom de l'operateur du serveur >>>")
+	op = question("Entrez le nom de l'operateur du serveur >>>")
 	sauvgarde = open("./serveur/serveur/ops.txt","a")
 	sauvgarde.write(str(op) + "\n")
 	sauvgarde.close()
@@ -341,10 +351,10 @@ def config():
 		elif ligne == "pvp=true\n":
 			prop("Autoriser le PvP ? (oui/non) >>>","pvp=true","pvp=false","pvp=true")
 		elif ligne == "max-players=20\n":
-			slots = raw_input("Indiquez le nombre de slots >>>")
+			slots = question("Indiquez le nombre de slots >>>")
 			temp.write("max-players=" + slots)
 		elif "motd=" in ligne:
-			motd = raw_input("Indiquez le motd >>>")
+			motd = question("Indiquez le motd >>>")
 			temp.write("motd=" + motd)
 		else: # Ligne(s) qui ne correspond a rien
 			temp.write(ligne + "\n")
@@ -374,7 +384,7 @@ def finition():
 
 def prop(question,oui,non,defaut):
 	temp = open("./serveur/serveur/.server.properties.temp","a")
-	reponse = raw_input(question)
+	reponse = question(question)
 	if reponse == "non":
 		temp.write(non + "\n")
 	elif reponse == "oui":
@@ -435,34 +445,49 @@ def tbg(path):
 log = open("./log.txt","a")
 printinfo("Loading ...")
 
-chrono = time.time() # Demarrage du chrono
+ # Demarrage du chrono
 ok = False
 while ok is not True:
-	start = raw_input("Installation (install) ou statistiques (stats) ou mise a jour de craft bukkit (majCB) ou Mise a jour des plugins (majPL) ou une fonction de stat pour le plugin The bukkitgames (tbg) ? >>>")
-	if start == "install":
+	chrono = time.time()
+	choix = question("Bukkit (bukkit) ou autres (autres) ou quitter (q)? >>>")
+	if choix == "bukkit" or choix == "b":
+		choix = question("Instalation (install), ou mise a jour (maj) ? >>>")
+		if choix == "install" or choix == "i":
+			installprocess()
+		elif choix == "maj" or choix == "m":
+			choix = question("Mise a jour de craft bukkit (cb) ou des plugins (pl) ? >>>")
+			if choix == "pl" or choix == "p":
+				majPL()
+			elif choix == "cb" or choix == "c":
+				majCB()
+			else:
+				printerror("Je n'ai pas compris votre choix ! Retour au menu !")
+		else:
+			printerror("Je n'ai pas compris votre choix ! Retour au menu !")
+	elif choix == "autres" or choix == "a":
+		choix = question("Statistiques (stats) ou configuration de craft bukkit (config) ? >>>")
+		if choix == "stats" or choix == "s":
+			choix = question("Analyse du log (log) ou du leaderboard de The BukkitGames (tbg) ? >>>")
+			if choix == "log" or choix == "l":
+				path = question("Deplacez ici votre fichier server.log et tapez entrer >>>")
+				printinfo ("Lancement du processus : cela peut prendre du temps !")
+				mclp(path.replace(" ",""))
+			elif choix == "tbg" or choix == "t":
+		  		path = question("Deplacez ici votre fichier leaderboard et tapez entrer >>>")
+				printinfo ("Lancement du processus")
+				tbg(path.replace(" ",""))
+			else:
+				printerror("Je n'ai pas compris votre choix ! Retour au menu !")
+		elif choix == "config" or choix == "c":
+			config()
+		else:
+			printerror("Je n'ai pas compris votre choix ! Retour au menu !")
+	elif choix == "q":
 		ok = True
-		installprocess()
-	elif start == "stats":
-		ok = True
-		path = raw_input("Deplacez ici votre fichier server.log et tapez entrer >>>")
-		printinfo ("Lancement du processus : cela peut prendre du temps !")
-		mclp(path.replace(" ",""))
-	elif start == "majCB":
-		majCB()
-		ok = True
-	elif start == "majPL":
-		majPL()
-		ok = True
- 	elif start == "config":
-  		config()
-  		ok = True
-  	elif start == "tbg":
-  		path = raw_input("Deplacez ici votre fichier leaderboard et tapez entrer >>>")
-		printinfo ("Lancement du processus")
-		tbg(path.replace(" ",""))
-	else :
-		ok = False
-		printerror("Soit install, soit stats, soit majCB, soit majPL, soit tbg :)")
+		
+	else:
+		printerror("Je n'ai pas compris votre choix !")
+
 log.close()
 
 
@@ -473,3 +498,4 @@ log.close()
 ######  #    #  ####
 #       #    #  #
 ######  ######  #
+
