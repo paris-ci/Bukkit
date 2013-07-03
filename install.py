@@ -5,7 +5,6 @@
 
 ############## VARS ##############
 
-
 normal = "\033[0m"
 # style
 bold = "\033[1m"
@@ -419,7 +418,7 @@ def majPL():
 	finition()
 	
 ###############
-# 
+
 def tbg(path):
 	leaderboard = open(path,"r") #Ouverture du fichier
 	joueurs = []
@@ -431,8 +430,16 @@ def tbg(path):
 	joueurprecedent = ""
 	for joueur in joueurs:
 		if not joueurprecedent == joueur :
-			printinfo(joueur + "a gagné " + str(joueurs.count(joueur)) + " fois")
+			printinfo(str(joueur) + " a gagné " + str(joueurs.count(joueur)) + " fois")
 		joueurprecedent = joueur
+		
+def maintenance():
+	printinfo("Suppression des logs")
+	os.system("rm log.txt")
+	printinfo("Supression du dossier temporaire")
+	os.system("rm ./serveur/serveur")
+###############
+
 ############## MAIN ##############
 
 #       #      #      #########  ##    #
@@ -445,7 +452,6 @@ def tbg(path):
 
 log = open("./log.txt","a") # Creation - ouverture du fichier de log
 printinfo("Loading ...")
-
 
 # Menu un peu moche ...
 ok = False
@@ -467,11 +473,11 @@ while ok is not True:
 		else:
 			printerror("Je n'ai pas compris votre choix ! Retour au menu !")
 	elif choix == "autres" or choix == "a":
-		choix = question("Statistiques (stats) ou configuration de craft bukkit (config) ? >>>")
+		choix = question("Statistiques (stats) ou configuration de craftbukkit (config) ou maintenance (maintenance) ? >>>")
 		if choix == "stats" or choix == "s":
 			choix = question("Analyse du log (log) ou du leaderboard de The BukkitGames (tbg) ? >>>")
 			if choix == "log" or choix == "l":
-				path = question("Deplacez ici votre fichier server.log et tapez entrer >>>")
+				path = question("Deplacez ici votre fichier server.log et tapez entrer >>>∏")
 				printinfo ("Lancement du processus : cela peut prendre du temps !")
 				mclp(path.replace(" ",""))
 			elif choix == "tbg" or choix == "t":
@@ -482,6 +488,8 @@ while ok is not True:
 				printerror("Je n'ai pas compris votre choix ! Retour au menu !")
 		elif choix == "config" or choix == "c":
 			config()
+		elif choix == "maintenance" or choix == "m":
+			maintenance()
 		else:
 			printerror("Je n'ai pas compris votre choix ! Retour au menu !")
 	elif choix == "q":
@@ -489,6 +497,7 @@ while ok is not True:
 		
 	else:
 		printerror("Je n'ai pas compris votre choix !")
+
 
 log.close() # Au revoir les logs !
 
