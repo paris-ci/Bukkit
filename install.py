@@ -74,6 +74,8 @@ def question(message):
 
 def mclp(path):
 	sauvgarde = open("stats.txt","w") # Ouverture du fichier pour enregistrer les stats
+	top50 = open("top50.txt","w") # Ouverture du fichier pour enregistrer le top50 pour etre mis dans une console
+
 	nbligne = 0 # Compteur de lignes
 	actions = {
 		"login": re.compile("([0-9]{4})\-([0-9]{2})\-([0-9]{2}) ([0-2][0-9])\:([0-9]{2})\:([0-9]{2}) \[INFO\] ([A-z0-9]*) ?\[\/[0-9.]{4,15}\:[0-9]*\]"),
@@ -166,7 +168,6 @@ def mclp(path):
 		counter = counter + 1
 		print "%2d) %s" % (counter, time)
 		sauvgarde.write("%2d) %s" % (counter, time) + "\n")
-		
 	f.close()
 	sauvgarde.close()
 
@@ -433,12 +434,14 @@ def tbg(path):
 			printinfo(str(joueur) + " a gagné " + str(joueurs.count(joueur)) + " fois")
 		joueurprecedent = joueur
 		
+###############
+
 def maintenance():
 	printinfo("Suppression des logs")
 	os.system("rm log.txt")
 	printinfo("Supression du dossier temporaire")
 	os.system("rm ./serveur/serveur")
-###############
+
 
 ############## MAIN ##############
 
@@ -477,13 +480,18 @@ while ok is not True:
 		if choix == "stats" or choix == "s":
 			choix = question("Analyse du log (log) ou du leaderboard de The BukkitGames (tbg) ? >>>")
 			if choix == "log" or choix == "l":
-				path = question("Deplacez ici votre fichier server.log et tapez entrer >>>∏")
-				printinfo ("Lancement du processus : cela peut prendre du temps !")
-				mclp(path.replace(" ",""))
+				try:
+					mclp("./server/server.log")
+				except:
+					path = question("Deplacez ici votre fichier server.log et tapez entrer >>>")
+					printinfo ("Lancement du processus")
 			elif choix == "tbg" or choix == "t":
-		  		path = question("Deplacez ici votre fichier leaderboard et tapez entrer >>>")
-				printinfo ("Lancement du processus")
-				tbg(path.replace(" ",""))
+				try:
+					tbg("./server/plugins/thebukkitgames/leaderboard.yml")
+				except:
+					path = question("Deplacez ici votre fichier leaderboard et tapez entrer >>>")
+					printinfo ("Lancement du processus")
+					tbg(path.replace(" ",""))
 			else:
 				printerror("Je n'ai pas compris votre choix ! Retour au menu !")
 		elif choix == "config" or choix == "c":
