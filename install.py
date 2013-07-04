@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 ## AUTO INSTALL PAR ARTHUR ##
+print " [LOAD] Loading Vars"
 
 ############## VARS ##############
 
@@ -31,6 +32,8 @@ on_magenta = "\033[45m"
 on_cyan = "\033[46m"
 on_white = "\033[47m"
 
+print "[LOAD] Importing libreries"
+
 ############# IMPORT #############
 
 
@@ -44,7 +47,7 @@ import re
 import datetime
 import operator
 
-
+print "[LOAD] Defining functions"
 ############## FUNC ##############
 
 def printinfo(message): # Print formaté
@@ -454,7 +457,7 @@ def maintenance():
 
 
 log = open("./log.txt","a") # Creation - ouverture du fichier de log
-printinfo("Loading ...")
+printinfo("[LOAD] Starting main ...")
 
 # Menu un peu moche ...
 ok = False
