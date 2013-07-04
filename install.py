@@ -37,15 +37,15 @@ print "[LOAD] Importing libreries"
 ############# IMPORT #############
 
 
-import sys
-import os
-import zipfile
-import urllib
-import time
-import subprocess
-import re
 import datetime
 import operator
+import os
+import re
+import subprocess
+import sys
+import time
+import urllib
+import zipfile
 
 print "[LOAD] Defining functions"
 ############## FUNC ##############
