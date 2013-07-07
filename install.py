@@ -77,7 +77,6 @@ def question(message):
 
 def mclp(path):
 	sauvgarde = open("stats.txt","w") # Ouverture du fichier pour enregistrer les stats
-	top50 = open("top50.txt","w") # Ouverture du fichier pour enregistrer le top50 pour etre mis dans une console
 
 	nbligne = 0 # Compteur de lignes
 	actions = {
@@ -179,6 +178,13 @@ def mclp(path):
 def majCB():
 	printinfo("Mise a jour du serveur !")
 	ok = False
+	try:
+		printinfo("Supression de la precedante sauvegarde de craftbukkit")
+		os.remove("./serveur/craftbukkit_OLD.jar")
+	except:
+		pass
+	printinfo("Sauvegarde de l'ancien craftbukkit")
+	os.rename("./serveur/craftbukkit.jar", "./serveur/craftbukkit_OLD.jar")
 	try:
 		while ok is not True:
 			version = question("Quelle version de craft bukkit voulez vous ? Une build de '" + cyan + "dev" + normal + "' (completement non-supportées et parfois instables), Une build '" + cyan + "beta" + normal + "' (generalement a jour et suportée a moitiée) ou une build ' " + cyan + "recommandee" + normal + "' (parfois une version majeure en moins ... Mais completement suportée) ? >>>" )
