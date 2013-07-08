@@ -452,6 +452,58 @@ def maintenance():
 	printinfo("Supression du dossier temporaire")
 	os.system("rm ./serveur/serveur")
 
+###############
+
+def menu():	# Menu un peu moche ...
+	ok = False
+	while ok is not True:
+		chrono = time.time()
+		choix = question("Bukkit (bukkit) ou autres (autres) ou quitter (q)? >>>")
+		if choix == "bukkit" or choix == "b":
+			choix = question("Instalation (install), ou mise a jour (maj) ? >>>")
+			if choix == "install" or choix == "i":
+				installprocess()
+			elif choix == "maj" or choix == "m":
+				choix = question("Mise a jour de craft bukkit (cb) ou des plugins (pl) ? >>>")
+				if choix == "pl" or choix == "p":
+					majPL()
+				elif choix == "cb" or choix == "c":
+					majCB()
+				else:
+					printerror("Je n'ai pas compris votre choix ! Retour au menu !")
+			else:
+				printerror("Je n'ai pas compris votre choix ! Retour au menu !")
+		elif choix == "autres" or choix == "a":
+			choix = question("Statistiques (stats) ou configuration de craftbukkit (config) ou maintenance (maintenance) ? >>>")
+			if choix == "stats" or choix == "s":
+				choix = question("Analyse du log (log) ou du leaderboard de The BukkitGames (tbg) ? >>>")
+				if choix == "log" or choix == "l":
+					try:
+						mclp("./serveur/server.log")
+					except:
+						path = question("Deplacez ici votre fichier server.log et tapez entrer >>>")
+						printinfo ("Lancement du processus")
+				elif choix == "tbg" or choix == "t":
+					try:
+						tbg("./serveur/plugins/thebukkitgames/leaderboard.yml")
+					except:
+						path = question("Deplacez ici votre fichier leaderboard et tapez entrer >>>")
+						printinfo ("Lancement du processus")
+						tbg(path.replace(" ",""))
+				else:
+					printerror("Je n'ai pas compris votre choix ! Retour au menu !")
+			elif choix == "config" or choix == "c":
+				config()
+			elif choix == "maintenance" or choix == "m":
+				maintenance()
+			else:
+				printerror("Je n'ai pas compris votre choix ! Retour au menu !")
+		elif choix == "q":
+			ok = True
+			
+		else:
+			printerror("Je n'ai pas compris votre choix !")
+
 
 ############## MAIN ##############
 
@@ -462,67 +514,24 @@ def maintenance():
 #   #   #  #       #  #########  #    ##
 
 
+try:
+	log = open("./log.txt","a") # Creation - ouverture du fichier de log
+	printinfo("[LOAD] Starting main ...")
 
-log = open("./log.txt","a") # Creation - ouverture du fichier de log
-printinfo("[LOAD] Starting main ...")
+	print("\t @@@@@@   @@                                                              @@\n\t/@////@@ //                                                              /@@\n\t/@   /@@  @@  @@@@@  @@@@@@@  @@    @@  @@@@@  @@@@@@@  @@   @@  @@@@@   /@@\n\t/@@@@@@  /@@ @@///@@//@@///@@/@@   /@@ @@///@@//@@///@@/@@  /@@ @@///@@  /@@\n\t/@//// @@/@@/@@@@@@@ /@@  /@@//@@ /@@ /@@@@@@@ /@@  /@@/@@  /@@/@@@@@@@  /@@\n\t/@    /@@/@@/@@////  /@@  /@@ //@@@@  /@@////  /@@  /@@/@@  /@@/@@////   // \n\t/@@@@@@@ /@@//@@@@@@ @@@  /@@  //@@   //@@@@@@ @@@  /@@//@@@@@@//@@@@@@   @@\n\t///////  //  ////// ///   //    //     ////// ///   //  //////  //////   // \n")
 
-print("\t @@@@@@   @@                                                              @@\n\t/@////@@ //                                                              /@@\n\t/@   /@@  @@  @@@@@  @@@@@@@  @@    @@  @@@@@  @@@@@@@  @@   @@  @@@@@   /@@\n\t/@@@@@@  /@@ @@///@@//@@///@@/@@   /@@ @@///@@//@@///@@/@@  /@@ @@///@@  /@@\n\t/@//// @@/@@/@@@@@@@ /@@  /@@//@@ /@@ /@@@@@@@ /@@  /@@/@@  /@@/@@@@@@@  /@@\n\t/@    /@@/@@/@@////  /@@  /@@ //@@@@  /@@////  /@@  /@@/@@  /@@/@@////   // \n\t/@@@@@@@ /@@//@@@@@@ @@@  /@@  //@@   //@@@@@@ @@@  /@@//@@@@@@//@@@@@@   @@\n\t///////  //  ////// ///   //    //     ////// ///   //  //////  //////   // \n")
-
-# Menu un peu moche ...
-ok = False
-while ok is not True:
-	chrono = time.time()
-	choix = question("Bukkit (bukkit) ou autres (autres) ou quitter (q)? >>>")
-	if choix == "bukkit" or choix == "b":
-		choix = question("Instalation (install), ou mise a jour (maj) ? >>>")
-		if choix == "install" or choix == "i":
-			installprocess()
-		elif choix == "maj" or choix == "m":
-			choix = question("Mise a jour de craft bukkit (cb) ou des plugins (pl) ? >>>")
-			if choix == "pl" or choix == "p":
-				majPL()
-			elif choix == "cb" or choix == "c":
-				majCB()
-			else:
-				printerror("Je n'ai pas compris votre choix ! Retour au menu !")
-		else:
-			printerror("Je n'ai pas compris votre choix ! Retour au menu !")
-	elif choix == "autres" or choix == "a":
-		choix = question("Statistiques (stats) ou configuration de craftbukkit (config) ou maintenance (maintenance) ? >>>")
-		if choix == "stats" or choix == "s":
-			choix = question("Analyse du log (log) ou du leaderboard de The BukkitGames (tbg) ? >>>")
-			if choix == "log" or choix == "l":
-				try:
-					mclp("./server/server.log")
-				except:
-					path = question("Deplacez ici votre fichier server.log et tapez entrer >>>")
-					printinfo ("Lancement du processus")
-			elif choix == "tbg" or choix == "t":
-				try:
-					tbg("./server/plugins/thebukkitgames/leaderboard.yml")
-				except:
-					path = question("Deplacez ici votre fichier leaderboard et tapez entrer >>>")
-					printinfo ("Lancement du processus")
-					tbg(path.replace(" ",""))
-			else:
-				printerror("Je n'ai pas compris votre choix ! Retour au menu !")
-		elif choix == "config" or choix == "c":
-			config()
-		elif choix == "maintenance" or choix == "m":
-			maintenance()
-		else:
-			printerror("Je n'ai pas compris votre choix ! Retour au menu !")
-	elif choix == "q":
-		ok = True
-		
-	else:
-		printerror("Je n'ai pas compris votre choix !")
+	menu()
 
 
-log.close() # Au revoir les logs !
-
-	                    
-
+	log.close() # Au revoir les logs !
+except KeyboardInterrupt:
+	print("")
+	printerror("Arret forcé du script ? -- KILLED")
+	sys.exit()
+except:
+	print("")
+	printerror("Une erreur est survenue ... Le script s'arette !")
+	raise
 ############################################################
 
 ######  ######  #######
