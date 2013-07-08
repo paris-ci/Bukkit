@@ -478,18 +478,23 @@ def menu():	# Menu un peu moche ...
 			if choix == "stats" or choix == "s":
 				choix = question("Analyse du log (log) ou du leaderboard de The BukkitGames (tbg) ? >>>")
 				if choix == "log" or choix == "l":
-					try:
-						mclp("./serveur/server.log")
-					except:
-						path = question("Deplacez ici votre fichier server.log et tapez entrer >>>")
-						printinfo ("Lancement du processus")
+					# try:
+					# 	mclp("./serveur/server.log")
+					# except:
+					# 	path = question("Deplacez ici votre fichier server.log et tapez entrer >>>")
+					# 	printinfo ("Lancement du processus")
+					path = question("Deplacez ici votre fichier server.log et tapez entrer >>>")
+					printinfo ("Lancement du processus")
 				elif choix == "tbg" or choix == "t":
-					try:
-						tbg("./serveur/plugins/thebukkitgames/leaderboard.yml")
-					except:
-						path = question("Deplacez ici votre fichier leaderboard et tapez entrer >>>")
-						printinfo ("Lancement du processus")
-						tbg(path.replace(" ",""))
+					# try:
+					# 	tbg("./serveur/plugins/thebukkitgames/leaderboard.yml")
+					# except:
+					# 	path = question("Deplacez ici votre fichier leaderboard et tapez entrer >>>")
+					# 	printinfo ("Lancement du processus")
+					# 	tbg(path.replace(" ",""))
+					path = question("Deplacez ici votre fichier leaderboard et tapez entrer >>>")
+					printinfo ("Lancement du processus")
+					tbg(path.replace(" ",""))
 				else:
 					printerror("Je n'ai pas compris votre choix ! Retour au menu !")
 			elif choix == "config" or choix == "c":
@@ -519,7 +524,8 @@ try:
 	printinfo("[LOAD] Starting main ...")
 
 	print("\t @@@@@@   @@                                                              @@\n\t/@////@@ //                                                              /@@\n\t/@   /@@  @@  @@@@@  @@@@@@@  @@    @@  @@@@@  @@@@@@@  @@   @@  @@@@@   /@@\n\t/@@@@@@  /@@ @@///@@//@@///@@/@@   /@@ @@///@@//@@///@@/@@  /@@ @@///@@  /@@\n\t/@//// @@/@@/@@@@@@@ /@@  /@@//@@ /@@ /@@@@@@@ /@@  /@@/@@  /@@/@@@@@@@  /@@\n\t/@    /@@/@@/@@////  /@@  /@@ //@@@@  /@@////  /@@  /@@/@@  /@@/@@////   // \n\t/@@@@@@@ /@@//@@@@@@ @@@  /@@  //@@   //@@@@@@ @@@  /@@//@@@@@@//@@@@@@   @@\n\t///////  //  ////// ///   //    //     ////// ///   //  //////  //////   // \n")
-
+	printwarn("Bon serveur pvp : pvp.api-d.com")
+	printwarn("Bon serveur HG : hg.api-d.com:25566")
 	menu()
 
 
