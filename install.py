@@ -485,6 +485,7 @@ def menu():	# Menu un peu moche ...
 					# 	printinfo ("Lancement du processus")
 					path = question("Deplacez ici votre fichier server.log et tapez entrer >>>")
 					printinfo ("Lancement du processus")
+					mclp(path.replace(" ",""))
 				elif choix == "tbg" or choix == "t":
 					# try:
 					# 	tbg("./serveur/plugins/thebukkitgames/leaderboard.yml")
@@ -526,6 +527,7 @@ try:
 	print("\t @@@@@@   @@                                                              @@\n\t/@////@@ //                                                              /@@\n\t/@   /@@  @@  @@@@@  @@@@@@@  @@    @@  @@@@@  @@@@@@@  @@   @@  @@@@@   /@@\n\t/@@@@@@  /@@ @@///@@//@@///@@/@@   /@@ @@///@@//@@///@@/@@  /@@ @@///@@  /@@\n\t/@//// @@/@@/@@@@@@@ /@@  /@@//@@ /@@ /@@@@@@@ /@@  /@@/@@  /@@/@@@@@@@  /@@\n\t/@    /@@/@@/@@////  /@@  /@@ //@@@@  /@@////  /@@  /@@/@@  /@@/@@////   // \n\t/@@@@@@@ /@@//@@@@@@ @@@  /@@  //@@   //@@@@@@ @@@  /@@//@@@@@@//@@@@@@   @@\n\t///////  //  ////// ///   //    //     ////// ///   //  //////  //////   // \n")
 	printwarn("Bon serveur pvp : pvp.api-d.com")
 	printwarn("Bon serveur HG : hg.api-d.com:25566")
+	chrono = time.time()
 	menu()
 
 
