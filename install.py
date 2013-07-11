@@ -32,6 +32,8 @@ on_magenta = "\033[45m"
 on_cyan = "\033[46m"
 on_white = "\033[47m"
 
+
+
 print "[LOAD] Importing libreries"
 
 ############# IMPORT #############
@@ -249,7 +251,7 @@ def dl(nom,url):
 
 def dlzip(nom,url):
 	printinfo ("Installation de " + nom + " !")
-	printinfo ("Cela peut prendre 1 a 2 minutes ... Veuillez patienter et ne pas aretter le processus")
+	printwarn ("Cela peut prendre 1 a 2 minutes ... Veuillez patienter et ne pas aretter le processus")
 	urllib.urlretrieve(url, './serveur/serveur/plugins/' + nom + ".zip") # DL
 	printinfo ("Téléchargement terminé")
 	printinfo ("Extraction du .zip")
