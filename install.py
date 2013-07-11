@@ -483,9 +483,25 @@ def menu():	# Menu un peu moche ...
 					# except:
 					# 	path = question("Deplacez ici votre fichier server.log et tapez entrer >>>")
 					# 	printinfo ("Lancement du processus")
+					choix = question("Analyse du log simple (slog) ou analyse du log continue(clog) ? >>>")
 					path = question("Deplacez ici votre fichier server.log et tapez entrer >>>")
-					printinfo ("Lancement du processus")
-					mclp(path.replace(" ",""))
+					if choix == "slog" or choix == "s":
+						mclp(path.replace(" ",""))
+					elif choix == "clog" or "c":
+						continuer = True
+						while continuer is not False:
+							try :
+								mclp(path.replace(" ",""))
+								printinfo("Attente de 60 secondes avant de re-lancer le script -- Pour le quitter, appuyez sur ctrl et c en meme temps !")
+								progressbar(60)
+							except KeyboardInterrupt:
+								print("")
+								printwarn("Arret du script ? -- KILLED")
+								continuer = False
+								pass
+								
+					else:
+						printerror("Je n'ai pas compris votre choix ! Retour au menu !")
 				elif choix == "tbg" or choix == "t":
 					# try:
 					# 	tbg("./serveur/plugins/thebukkitgames/leaderboard.yml")
