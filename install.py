@@ -48,6 +48,14 @@ import sys
 import time
 import urllib
 import zipfile
+# try :
+# 	import pastebin
+# except:
+# 	print(red +  time.strftime("%H:%M:%S", time.gmtime()) + " [ERREUR] " + "PastebinAPI n'est pas installé ! Desactivation de pastebin" + normal)
+# 	pastebinIntegre = False
+# 	pass
+# else:
+# 	pastebinIntegre = True
 
 print "[LOAD] Defining functions"
 ############## FUNC ##############
@@ -491,6 +499,16 @@ def menu():	# Menu un peu moche ...
 						mclp(path.replace(" ",""))
 					elif choix == "clog" or "c":
 						continuer = True
+						
+						while continuer is not False:
+							try:
+								temps = question("Combien de secondes entre chaque relancement ? (60 sec = 1 minute) >>>")
+								int(temps)
+							except:
+								printerror("Entre un nombre ici !")
+							else : 
+								continuer = False
+						continuer = True
 						while continuer is not False:
 							try :
 								mclp(path.replace(" ",""))
@@ -501,7 +519,7 @@ def menu():	# Menu un peu moche ...
 								printwarn("Arret du script ? -- KILLED")
 								continuer = False
 								pass
-								
+
 					else:
 						printerror("Je n'ai pas compris votre choix ! Retour au menu !")
 				elif choix == "tbg" or choix == "t":
@@ -516,6 +534,7 @@ def menu():	# Menu un peu moche ...
 					tbg(path.replace(" ",""))
 				else:
 					printerror("Je n'ai pas compris votre choix ! Retour au menu !")
+
 			elif choix == "config" or choix == "c":
 				config()
 			elif choix == "maintenance" or choix == "m":
@@ -558,6 +577,14 @@ except:
 	print("")
 	printerror("Une erreur est survenue ... Le script s'arette !")
 	raise
+else :
+	print(time.strftime("%H:%M:%S", time.gmtime()) + " [INFO] " + "Au revoir !")
+finally:
+	print(time.strftime("%H:%M:%S", time.gmtime()) + " [INFO] " + "Vous quittez le script !")
+	progressbar(2)
+	log.close() # Au revoir les logs !
+
+
 ############################################################
 
 ######  ######  ####### 
