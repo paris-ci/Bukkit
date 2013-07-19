@@ -464,6 +464,30 @@ def maintenance():
 
 ###############
 
+def devmenu():
+	printwarn("Vous etes maintenent dans le devmenu ! Faites attention ici !")
+	choix = question("Que faire ? \n *Afficher le log (log) \n *Afficher les erreurs du log (elog) \n >>>")
+
+	if choix == "log"or choix == "l":
+		logr = open("./log.txt","r") # Creation - ouverture du fichier de log
+		numligne = 0
+		for ligne in logr:
+			numligne = numligne + 1
+			print(str(numligne) + ") " + ligne)
+		logr.close
+	elif choix == "elog" or choix == "e":
+		logr = open("./log.txt","r") # Creation - ouverture du fichier de log
+		numligne = 0
+		for ligne in logr:
+			numligne = numligne + 1
+			if "[ERREUR]" in ligne:
+				print(str(numligne) + ") " + ligne)
+		logr.close
+	else:
+		printerror("Je n'ai pas compris votre choix ! Retour au menu !")
+
+###############
+
 def menu():	# Menu un peu moche ...
 	ok = False
 	while ok is not True:
@@ -543,7 +567,8 @@ def menu():	# Menu un peu moche ...
 				printerror("Je n'ai pas compris votre choix ! Retour au menu !")
 		elif choix == "q":
 			ok = True
-			
+		elif choix == "dev" or choix == "d":
+			devmenu()	
 		else:
 			printerror("Je n'ai pas compris votre choix !")
 
