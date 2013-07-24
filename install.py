@@ -196,25 +196,7 @@ def majCB():
 	printinfo("Sauvegarde de l'ancien craftbukkit")
 	os.rename("./serveur/craftbukkit.jar", "./serveur/craftbukkit_OLD.jar")
 	try:
-		while ok is not True:
-			version = question("Quelle version de craft bukkit voulez vous ? Une build de '" + cyan + "dev" + normal + "' (completement non-supportées et parfois instables), Une build '" + cyan + "beta" + normal + "' (generalement a jour et suportée a moitiée) ou une build ' " + cyan + "recommandee" + normal + "' (parfois une version majeure en moins ... Mais completement suportée) ? >>>" )
-			if version == "recommandee":
-				printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
-				printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
-				urllib.urlretrieve('http://dl.bukkit.org/latest-rb/craftbukkit.jar', './serveur/craftbukkit.jar') # téléchargement de CB (latest - RB)
-				ok = True
-			elif version == "beta":
-				printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
-				printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
-				urllib.urlretrieve('http://dl.bukkit.org/latest-beta/craftbukkit-beta.jar', './serveur/craftbukkit.jar') # téléchargement de CB (latest - beta)
-				ok = True
-			elif version == "dev":
-				printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
-				printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
-				urllib.urlretrieve('http://dl.bukkit.org/latest-dev/craftbukkit-dev.jar', './serveur/craftbukkit.jar') # téléchargement de CB (latest - dev)
-				ok = True
-			else :
-				printerror ("Version " + version + " non trouvée ... Choisisez entre recommandee, beta et dev")
+		dlbukkit()
 	except:
 		printerror("Dossier serveur introuvable : lance une installation !")
 		installprocess() # Et ca se fait tout seul ! Génial non ?
@@ -291,9 +273,16 @@ def install():
 	command.write("""#!/bin/bash \n cd "$( dirname "$0" )"\njava -server -Xmx2G -jar ./craftbukkit.jar\n """)
 	os.system("chmod +x ./serveur/serveur/demarrer.command")
 	command.close()
+	dlbukkit()
+	printinfo ("Lancement du serveur ... Veuillez ne rien toucher !")
+	generation(60) # Generation des fichiers par un lancement du serveur
+
+###############
+
+def dlbukkit():
 	ok = False
 	while ok is not True:
-		version = question("Quelle version de craft bukkit voulez vous ? Une build de '" + cyan + "dev" + normal + "' (completement non-supportées et parfois instables), Une build '" + cyan + "beta" + normal + "' (generalement a jour et suportée a moitiée) ou une build ' " + cyan + "recommandee" + normal + "' (parfois une version majeure en moins ... Mais completement suportée) ? >>>" )
+		version = question("Quelle version de craft bukkit voulez vous ? \n * Les dernieres versions : \n \t * Build de devloppement (dev) \n \t * Build beta (beta) \n \t * Build recomandée (recomandee) \n * Les versions precises \n \t * 1.6.2\n \t * 1.6.1 \n \t * 1.5.2 \n \t * 1.5.1\n \t * 1.5\n \t * 1.4.7\n \t * 1.4.6\n \t * 1.4.5\n \t * 1.4.4\n \t * 1.4.2\n \t * 1.3.2\n \t * 1.3.1\n \t * 1.2.5\n \t * 1.2.4\n \t * 1.2.3\n \t * 1.2.1 \n \t * 1.1 \n \t * 1.0.1 \n \t * 1.0.0 \n \t * B1.8.1 \n \t * B0.0.1 \n>>>" )
 		if version == "recommandee":
 			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
 			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
@@ -309,38 +298,222 @@ def install():
 			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
 			urllib.urlretrieve('http://dl.bukkit.org/latest-dev/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') # téléchargement de CB (latest - dev)
 			ok = True
+		elif version == "1.6.2":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/02213_1.6.2-R0.1/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.6.1":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/02194_1.6.1-R0.1/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.5.2":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/02180_1.5.2-R1.1/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.5.1":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/02099_1.5.1-R0.3/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.5":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/01980_1.5-R0.1/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.4.7":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/01910_1.4.7-R1.1/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.4.6":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/01800_1.4.6-R0.4/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.4.5":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/01707_1.4.5-R1.0/craftbukkit.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.4.4":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/01571_1.4.4-R0.1/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.4.2":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/01554_1.4.2-R0.3/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.3.2":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/01479_1.3.2-R3.0/craftbukkit.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.3.1":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/01389_1.3.1-R2.1/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.2.5":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/01260_1.2.5-R5.1/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.2.4":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/00993_1.2.4-R1.0/craftbukkit.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.2.3":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/00954_1.2.3-R0.3/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.2.2":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/00823_1.2.2-R0.1/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.1":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/00790_1.1-R6/craftbukkit.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.0.1":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/00364_1.0.1-R2/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.3.2":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/01479_1.3.2-R3.0/craftbukkit.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "1.0.0":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/00251_1.0.0/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "B1.8.1":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/00128_1.8.1-R5/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
+		elif version == "B0.0.1":
+			printinfo ("Télechargement de la derniere version " + version + " de craft bukkit")
+			printwarn ("Cela peut prendre 2 a 3 minutes ... Veuillez patienter et ne pas aretter le processus")
+			urllib.urlretrieve('http://dl.bukkit.org/downloads/craftbukkit/get/00042_0.0.1/craftbukkit-dev.jar', './serveur/serveur/craftbukkit.jar') 
+			ok = True
 		elif version =="pass":
 			ok = True
 			printwarn ("Aucun telechargement !!!!")
 		else :
-			printerror("Version " + version + " non trouvée ... Choisisez entre recommandee, beta et dev")
-	printinfo ("Lancement du serveur ... Veuillez ne rien toucher !")
-	generation(60) # Generation des fichiers par un lancement du serveur
+			printerror("Version " + version + " non trouvée ... Choisisez entre les choix proposés")
 
 
 ###############
 
 def plugins(lancer):
 	## INSTALL ESSENTIALS ##
-	dlzip ("essentials","http://ess.ementalo.com/repository/download/bt2/.lastSuccessful/Essentials.zip?guest=1")
-	if lancer == True:
-		printinfo ("Lancement du serveur pour creer la config essentials !")
-		generation(40)
-	## INSTALL PEX ##
-	dlzip("pex","http://dev.bukkit.org/media/files/659/820/PermissionsEx-1.19.5-package.zip")
-	## INSTALL WE ##
-	dlzip("we","http://dev.bukkit.org/media/files/698/942/worldedit-5.5.6.zip")
-	## INSTALL WG ##
-	dlzip("wg","http://dev.bukkit.org/media/files/702/797/worldguard-5.7.4.zip")
-	## INSTALL BOSE ECO ##
-	dlzip("boseecon","http://dev.bukkit.org/media/files/577/409/BOSEcon0731.zip")
-	## INSTALL DYNMAP ##
-	dlzip("dynmap","http://webbukkit.org/jenkins/public/dynmap/dynmap-HEAD-bin.zip")
-	os.system("rm ./serveur/serveur/plugins/wg/contrib") # Dossier particulier 
-	## INSTALL VAULT ##
-	dl("vault","http://dev.bukkit.org/media/files/694/78/Vault.jar") 
-	## INSTALL NO CHEAT PLUS ##
-	dl("ncp","http://ci.md-5.net/job/NoCheatPlus/lastSuccessfulBuild/artifact/target/NoCheatPlus.jar")
+	installer = "oui"
+	continuer = False
+	while continuer is False :
+		installer = question("Installer essentials ? oui/non >>>")
+		if installer == "oui" or installer == "non":
+			continuer = True
+		else:
+			printerror("Oui ou non !")
+
+	if installer == "oui":
+		dlzip ("essentials","http://ess.ementalo.com/repository/download/bt2/.lastSuccessful/Essentials.zip?guest=1")
+		if lancer == True:
+			printinfo ("Lancement du serveur pour creer la config essentials !")
+			generation(40)
+
+	installer = "oui"
+	continuer = False
+	while continuer is False :
+		installer = question("Installer PermissionsEx ? oui/non >>>")
+		if installer == "oui" or installer == "non":
+			continuer = True
+		else:
+			printerror("Oui ou non !")
+	if installer == "oui":
+		## INSTALL PEX ##
+		dlzip("pex","http://dev.bukkit.org/media/files/659/820/PermissionsEx-1.19.5-package.zip")
+
+	installer = "oui"
+	continuer = False
+	while continuer is False :
+		installer = question("Installer WorldEdit ? oui/non >>>")
+		if installer == "oui" or installer == "non":
+			continuer = True
+		else:
+			printerror("Oui ou non !")
+	if installer == "oui":
+		## INSTALL WE ##
+		dlzip("we","http://dev.bukkit.org/media/files/698/942/worldedit-5.5.6.zip")
+
+	installer = "oui"
+	continuer = False
+	while continuer is False :
+		installer = question("Installer WorldGuard ? oui/non >>>")
+		if installer == "oui" or installer == "non":
+			continuer = True
+		else:
+			printerror("Oui ou non !")
+	if installer == "oui":
+		## INSTALL WG ##
+		dlzip("wg","http://dev.bukkit.org/media/files/702/797/worldguard-5.7.4.zip")
+	installer = "oui"
+	continuer = False
+	while continuer is False :
+		installer = question("Installer BoseEconomy ? oui/non >>>")
+		if installer == "oui" or installer == "non":
+			continuer = True
+		else:
+			printerror("Oui ou non !")
+	if installer == "oui":	
+		## INSTALL BOSE ECO ##
+		dlzip("boseecon","http://dev.bukkit.org/media/files/577/409/BOSEcon0731.zip")
+	installer = "oui"
+	continuer = False
+	while continuer is False :
+		installer = question("Installer DynMap ? oui/non >>>")
+		if installer == "oui" or installer == "non":
+			continuer = True
+		else:
+			printerror("Oui ou non !")
+	if installer == "oui":
+		## INSTALL DYNMAP ##
+		dlzip("dynmap","http://webbukkit.org/jenkins/public/dynmap/dynmap-HEAD-bin.zip")
+		os.system("rm ./serveur/serveur/plugins/wg/contrib") # Dossier particulier 
+		installer = "oui"
+	continuer = False
+	while continuer is False :
+		installer = question("Installer Vault ? oui/non >>>")
+		if installer == "oui" or installer == "non":
+			continuer = True
+		else:
+			printerror("Oui ou non !")
+	if installer == "oui":
+		## INSTALL VAULT ##
+		dl("vault","http://dev.bukkit.org/media/files/694/78/Vault.jar") 
+	installer = "oui"
+	continuer = False
+	while continuer is False :
+		installer = question("Installer NoCheatPlus ? oui/non >>>")
+		if installer == "oui" or installer == "non":
+			continuer = True
+		else:
+			printerror("Oui ou non !")
+	if installer == "oui":
+		## INSTALL NO CHEAT PLUS ##
+		dl("ncp","http://ci.md-5.net/job/NoCheatPlus/lastSuccessfulBuild/artifact/target/NoCheatPlus.jar")
 
 ###############
 
@@ -466,7 +639,7 @@ def maintenance():
 
 def devmenu():
 	printwarn("Vous etes maintenent dans le devmenu ! Faites attention ici !")
-	choix = question("Que faire ? \n *Afficher le log (log) \n *Afficher les erreurs du log (elog) \n >>>")
+	choix = question("Que faire ? \n *Afficher le log \t\t\t(log) \n *Afficher les erreurs du log \t\t(elog) \n *Afficher une erreur \t\t\t(erreur) \n *Afficher l'adresse du github \t\t(github) \n>>>")
 
 	if choix == "log"or choix == "l":
 		logr = open("./log.txt","r") # Creation - ouverture du fichier de log
@@ -475,7 +648,7 @@ def devmenu():
 			numligne = numligne + 1
 			print(str(numligne) + ") " + ligne)
 		logr.close
-	elif choix == "elog" or choix == "e":
+	elif choix == "elog" or choix == "el":
 		logr = open("./log.txt","r") # Creation - ouverture du fichier de log
 		numligne = 0
 		for ligne in logr:
@@ -483,6 +656,11 @@ def devmenu():
 			if "[ERREUR]" in ligne:
 				print(str(numligne) + ") " + ligne)
 		logr.close
+	elif choix == "erreur" or choix == "er":
+		message = question("Quel message d'erreur ? >>>")
+		raise NameError(message)
+	elif choix == "github" or choix == "g":
+		printinfo("Adresse du github : https://github.com/paris-ci/Bukkit")
 	else:
 		printerror("Je n'ai pas compris votre choix ! Retour au menu !")
 
